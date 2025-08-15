@@ -9,9 +9,29 @@
     <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #f8fafc; /* slate-50 */
+            --bg-secondary: #ffffff; /* white */
+            --text-primary: #0f172a; /* slate-900 */
+            --text-secondary: #475569; /* slate-600 */
+            --border-color: #e2e8f0; /* slate-200 */
+            --accent-color: #38bdf8; /* sky-400 */
+        }
+
+        html.dark {
+            --bg-primary: #0f172a; /* slate-900 */
+            --bg-secondary: #1e293b; /* slate-800 */
+            --text-primary: #f8fafc; /* slate-50 */
+            --text-secondary: #94a3b8; /* slate-400 */
+            --border-color: #334155; /* slate-700 */
+            --accent-color: #38bdf8; /* sky-400 */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* slate-50 */
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
+            transition: background-color 0.3s, color 0.3s;
         }
         .task-input, .time-input {
             background-color: transparent;
@@ -20,10 +40,11 @@
             padding: 2px;
             margin: -2px;
             border-radius: 4px;
+            color: inherit;
         }
         .task-input:focus, .time-input:focus {
-            outline: 2px solid #38bdf8; /* sky-400 */
-            background-color: white;
+            outline: 2px solid var(--accent-color);
+            background-color: var(--bg-secondary);
         }
         .sticky-header {
             position: sticky;
@@ -40,13 +61,13 @@
             height: 24px;
             border-radius: 50%;
             cursor: pointer;
-            border: 2px solid #e2e8f0; /* slate-200 */
+            border: 2px solid var(--border-color);
         }
         .link-button {
             cursor: pointer;
             font-size: 1.1rem;
             text-decoration: none;
-            color: #475569; /* slate-600 */
+            color: var(--text-secondary);
             transition: transform 0.2s;
         }
         .link-button:hover {
@@ -61,10 +82,13 @@
             overflow: hidden;
             transition: max-height 0.3s ease-out;
         }
-        /* Style for the date picker icon */
         input[type="date"]::-webkit-calendar-picker-indicator {
             cursor: pointer;
             opacity: 0.8;
+            filter: invert(var(--date-picker-invert, 0));
+        }
+        html.dark {
+           --date-picker-invert: 1;
         }
     </style>
 </head>
@@ -72,21 +96,21 @@
 
     <div class="container mx-auto p-4 md:p-8">
         <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Your Interactive 6-Month FAANG Campaign</h1>
-            <p class="text-lg text-slate-600 max-w-3xl mx-auto">A scientific, day-by-day plan integrating high-level strategy with daily execution. Your changes are saved automatically.</p>
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50" style="color: var(--text-primary);">Your Interactive 6-Month FAANG Campaign</h1>
+            <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto" style="color: var(--text-secondary);">A scientific, day-by-day plan integrating high-level strategy with daily execution. Your changes are saved automatically.</p>
         </header>
 
         <section id="strategy-guide" class="mb-12">
-            <div class="bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
-                <h2 class="text-2xl font-bold text-center mb-6">The Strategic Foundation</h2>
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 max-w-4xl mx-auto" style="background-color: var(--bg-secondary);">
+                <h2 class="text-2xl font-bold text-center mb-6" style="color: var(--text-primary);">The Strategic Foundation</h2>
                 <div class="space-y-4" id="accordion-container">
                     <!-- Accordion Item 1: Mindset -->
-                    <div class="accordion-item border-b border-slate-200 pb-4">
-                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold text-slate-800">
+                    <div class="accordion-item border-b pb-4" style="border-color: var(--border-color);">
+                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold" style="color: var(--text-primary);">
                             <span>🧠 The SDE II Mindset: Beyond Implementation</span>
                             <span class="transform transition-transform duration-300">▼</span>
                         </button>
-                        <div class="accordion-content text-slate-600 pt-4 space-y-2">
+                        <div class="accordion-content pt-4 space-y-2" style="color: var(--text-secondary);">
                             <p>The leap to SDE II is about evolving from a coder to an architect and owner. Focus on demonstrating these traits:</p>
                             <ul class="list-disc list-inside space-y-1">
                                 <li><strong>Ownership & Autonomy:</strong> Drive features end-to-end, from design to deployment and support. Your professional projects are the best evidence of this.</li>
@@ -97,14 +121,14 @@
                         </div>
                     </div>
                     <!-- Accordion Item 2: Technical Pillars -->
-                    <div class="accordion-item border-b border-slate-200 pb-4">
-                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold text-slate-800">
+                    <div class="accordion-item border-b pb-4" style="border-color: var(--border-color);">
+                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold" style="color: var(--text-primary);">
                             <span> Pillars: A Parallel Approach to DSA & System Design</span>
                         </button>
-                        <div class="accordion-content text-slate-600 pt-4 space-y-4">
+                        <div class="accordion-content pt-4 space-y-4" style="color: var(--text-secondary);">
                             <p>For an SDE II, DSA and System Design must be studied in parallel. System design concepts need time to mature, while DSA skills require consistent practice.</p>
                             <div>
-                                <h4 class="font-semibold text-slate-700">Data Structures & Algorithms (DSA)</h4>
+                                <h4 class="font-semibold" style="color: var(--text-primary);">Data Structures & Algorithms (DSA)</h4>
                                 <p>The goal is deep pattern recognition, not memorization. Master these core topics:</p>
                                 <ul class="list-disc list-inside text-sm mt-1">
                                     <li><strong>Core Structures:</strong> Arrays, Hash Tables, Linked Lists, Stacks, Queues, Trees, Graphs, Heaps.</li>
@@ -112,7 +136,7 @@
                                 </ul>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-slate-700">System Design</h4>
+                                <h4 class="font-semibold" style="color: var(--text-primary);">System Design</h4>
                                 <p>This is where you demonstrate seniority. Master the building blocks of scalable systems:</p>
                                 <ul class="list-disc list-inside text-sm mt-1">
                                     <li><strong>HLD Concepts:</strong> Scalability, Caching, Load Balancing, CDNs, Message Queues, Databases (SQL vs. NoSQL), Sharding, CAP Theorem.</li>
@@ -122,12 +146,12 @@
                         </div>
                     </div>
                     <!-- Accordion Item 3: Behavioral -->
-                    <div class="accordion-item border-b border-slate-200 pb-4">
-                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold text-slate-800">
+                    <div class="accordion-item border-b pb-4" style="border-color: var(--border-color);">
+                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold" style="color: var(--text-primary);">
                             <span>💬 Behavioral Excellence: The STAR Method & "Googlyness"</span>
                             <span class="transform transition-transform duration-300">▼</span>
                         </button>
-                        <div class="accordion-content text-slate-600 pt-4 space-y-2">
+                        <div class="accordion-content pt-4 space-y-2" style="color: var(--text-secondary);">
                             <p>Structure your stories using the STAR method to provide clear, compelling, and impactful answers. Calibrate your stories to an SDE II level by focusing on impact and scope.</p>
                             <ul class="list-none space-y-1">
                                 <li><strong>S - Situation:</strong> Briefly set the scene with a specific event.</li>
@@ -139,25 +163,25 @@
                         </div>
                     </div>
                      <!-- Accordion Item 4: Secondary Priorities -->
-                    <div class="accordion-item border-b border-slate-200 pb-4">
-                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold text-slate-800">
+                    <div class="accordion-item border-b pb-4" style="border-color: var(--border-color);">
+                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold" style="color: var(--text-primary);">
                             <span>🎯 Secondary Priorities: Projects & AI/ML</span>
                             <span class="transform transition-transform duration-300">▼</span>
                         </button>
-                        <div class="accordion-content text-slate-600 pt-4 space-y-2">
-                           <h4 class="font-semibold text-slate-700">Personal Projects: Leverage, Don't Build</h4>
+                        <div class="accordion-content pt-4 space-y-2" style="color: var(--text-secondary);">
+                           <h4 class="font-semibold" style="color: var(--text-primary);">Personal Projects: Leverage, Don't Build</h4>
                            <p>Your two years of professional experience are more valuable than a new side project. Do not start a new project. Instead, prepare to discuss the architecture, challenges, and business impact of your professional work in depth.</p>
-                           <h4 class="font-semibold text-slate-700 mt-2">AI/ML: Awareness, Not Expertise</h4>
+                           <h4 class="font-semibold mt-2" style="color: var(--text-primary);">AI/ML: Awareness, Not Expertise</h4>
                            <p>For a generalist SDE II role, deep AI/ML knowledge is not required. Demonstrate awareness by treating components like "recommendation engines" as black-box microservices in system design. Discuss their architectural implications (APIs, latency) rather than their internal workings.</p>
                         </div>
                     </div>
                      <!-- Accordion Item 5: Resources -->
                     <div class="accordion-item">
-                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold text-slate-800">
+                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold" style="color: var(--text-primary);">
                             <span>📚 Curated Resources</span>
                             <span class="transform transition-transform duration-300">▼</span>
                         </button>
-                        <div class="accordion-content text-slate-600 pt-4 space-y-2">
+                        <div class="accordion-content pt-4 space-y-2" style="color: var(--text-secondary);">
                             <ul class="list-disc list-inside space-y-1">
                                 <li><strong>DSA Foundation:</strong> "Cracking the Coding Interview" (CCI), HelloInterview</li>
                                 <li><strong>DSA Practice:</strong> LeetCode / LeetCode Premium</li>
@@ -171,13 +195,17 @@
             </div>
         </section>
 
-        <div class="sticky-header bg-slate-50/80 backdrop-blur-lg py-4 mb-8 border-b border-slate-200">
+        <div class="sticky-header bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-lg py-4 mb-8 border-b" style="background-color: color-mix(in srgb, var(--bg-primary) 80%, transparent); border-color: var(--border-color);">
              <div class="flex justify-between items-center max-w-4xl mx-auto">
-                <button id="prev-day" class="px-4 py-2 bg-white border border-slate-300 rounded-md shadow-sm font-semibold hover:bg-slate-100 transition-colors">&lt; Prev</button>
-                <div class="flex items-center space-x-2">
-                    <input type="date" id="date-picker" class="p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-sky-500">
+                <button id="prev-day" class="px-4 py-2 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-md shadow-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" style="background-color: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);">&lt; Prev</button>
+                <div class="flex items-center space-x-4">
+                    <input type="date" id="date-picker" class="p-2 border rounded-md focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-800" style="background-color: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);">
+                    <button id="theme-toggle" class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                        <svg id="theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
                 </div>
-                <button id="next-day" class="px-4 py-2 bg-white border border-slate-300 rounded-md shadow-sm font-semibold hover:bg-slate-100 transition-colors">Next &gt;</button>
+                <button id="next-day" class="px-4 py-2 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-md shadow-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" style="background-color: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);">Next &gt;</button>
             </div>
         </div>
 
@@ -194,6 +222,9 @@
         const prevDayButton = document.getElementById('prev-day');
         const nextDayButton = document.getElementById('next-day');
         const accordionContainer = document.getElementById('accordion-container');
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIconLight = document.getElementById('theme-icon-light');
+        const themeIconDark = document.getElementById('theme-icon-dark');
         
         const startDate = new Date('2025-08-16T00:00:00');
         const totalDays = 182; // Approx 6 months
@@ -396,11 +427,13 @@
             const dailySchedule = studyPlan[dateString] || [];
             
             const dayCard = document.createElement('div');
-            dayCard.className = 'bg-white rounded-lg shadow-md p-4 flex flex-col';
+            dayCard.className = 'bg-white dark:bg-slate-800 rounded-lg shadow-md p-4 flex flex-col'
+            dayCard.style.backgroundColor = 'var(--bg-secondary)';
             dayCard.dataset.date = dateString;
             
             const dayHeader = document.createElement('h3');
             dayHeader.className = 'font-bold text-2xl mb-4 text-center';
+            dayHeader.style.color = 'var(--text-primary)';
             dayHeader.textContent = currentDate.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
             dayCard.appendChild(dayHeader);
             
@@ -415,7 +448,7 @@
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.checked = item.completed;
-                checkbox.className = 'flex-shrink-0 h-5 w-5 rounded text-sky-600 focus:ring-sky-500 border-slate-300';
+                checkbox.className = 'flex-shrink-0 h-5 w-5 rounded text-sky-600 focus:ring-sky-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700';
                 const tagSelector = document.createElement('select');
                 tagSelector.className = 'tag-selector flex-shrink-0';
                 tagSelector.style.backgroundColor = taskTags[item.type]?.color || taskTags.planning.color;
@@ -431,12 +464,12 @@
                 const timeInput = document.createElement('input');
                 timeInput.type = 'text';
                 timeInput.value = item.time;
-                timeInput.className = 'time-input font-semibold text-slate-700 w-2/5';
+                timeInput.className = 'time-input font-semibold text-slate-700 dark:text-slate-300 w-2/5';
                 timeInput.dataset.field = 'time';
                 const taskInput = document.createElement('input');
                 taskInput.type = 'text';
                 taskInput.value = item.task;
-                taskInput.className = 'task-input text-slate-800 w-3/5 ml-2';
+                taskInput.className = 'task-input text-slate-800 dark:text-slate-200 w-3/5 ml-2';
                 taskInput.dataset.field = 'task';
                 contentDiv.appendChild(timeInput);
                 contentDiv.appendChild(taskInput);
@@ -448,7 +481,7 @@
                     link.target = '_blank';
                     link.rel = 'noopener noreferrer';
                     link.textContent = '🔗';
-                    link.className = 'link-button';
+                    link.className = 'link-button dark:text-slate-400';
                     linkContainer.appendChild(link);
                 }
                 taskDiv.appendChild(checkbox);
@@ -513,8 +546,6 @@
         });
 
         datePicker.addEventListener('change', (e) => {
-            // The value is in YYYY-MM-DD format, which JS new Date() can parse incorrectly due to timezones.
-            // We need to parse it as UTC to avoid off-by-one day errors.
             const [year, month, day] = e.target.value.split('-').map(Number);
             currentDate = new Date(Date.UTC(year, month - 1, day));
             renderCurrentDay();
@@ -534,6 +565,37 @@
                 }
             }
         });
+
+        // Theme Toggle Logic
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                themeIconLight.classList.add('hidden');
+                themeIconDark.classList.remove('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                themeIconLight.classList.remove('hidden');
+                themeIconDark.classList.add('hidden');
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            const newTheme = isDark ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        } else if (systemPrefersDark) {
+            applyTheme('dark');
+        } else {
+            applyTheme('light');
+        }
 
         renderCurrentDay();
     });
