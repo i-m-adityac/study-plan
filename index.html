@@ -76,6 +76,8 @@
         .dark input[type="date"]::-webkit-calendar-picker-indicator {
            filter: invert(1);
         }
+        .task-tag { color: #1e293b; }
+        .dark .task-tag { color: #f1f5f9; }
     </style>
 </head>
 <body class="bg-light-bg dark:bg-dark-bg text-light-text-secondary dark:text-dark-text-secondary antialiased">
@@ -134,16 +136,13 @@
         const totalDays = 182;
         
         const taskTags = {
-            dsa: { color: '#bae6fd', name: 'DSA' },
-            sys: { color: '#a7f3d0', name: 'System Design' },
-            review: { color: '#fde68a', name: 'Revision' },
-            behavioral: { color: '#c7d2fe', name: 'Behavioral' },
-            mock: { color: '#fecdd3', name: 'Mock Interview' },
-            planning: { color: '#e2e8f0', name: 'Planning' }
+            dsa: { light: '#bae6fd', dark: '#0ea5e9', name: 'DSA' },
+            sys: { light: '#a7f3d0', dark: '#10b981', name: 'System Design' },
+            review: { light: '#fde68a', dark: '#f59e0b', name: 'Revision' },
+            behavioral: { light: '#c7d2fe', dark: '#6366f1', name: 'Behavioral' },
+            mock: { light: '#fecdd3', dark: '#f43f5e', name: 'Mock Interview' },
+            planning: { light: '#e2e8f0', dark: '#64748b', name: 'Planning' }
         };
-
-        const dsaTopics = ["Arrays & Hashing", "Two Pointers", "Sliding Window", "Stacks", "Binary Search", "Linked Lists", "Trees", "Tries", "Heaps", "Backtracking", "Graphs", "Advanced Graphs", "1-D DP", "2-D DP", "Intervals", "Greedy", "Bit Manipulation"];
-        let dsaTopicIndex = 0;
 
         const strategyGuideContent = [
             { title: "The SDE II Mindset", content: "The leap to SDE II is about evolving from a coder to an architect and owner. Focus on demonstrating ownership, dealing with ambiguity, and architectural thinking." },
@@ -167,51 +166,168 @@
             `).join('');
         }
 
-        function generateSpecificPlan() {
-            let plan = {};
-            plan['2025-08-16'] = [
-                { time: '9:00 AM - 11:00 AM', task: 'DSA: Solve LC 1 (Two Sum) & LC 242 (Valid Anagram)', type: 'dsa', link: 'https://leetcode.com/problemset/', completed: false },
-                { time: '11:00 AM - 1:00 PM', task: 'DSA: Solve LC 49 (Group Anagrams)', type: 'dsa', link: 'https://leetcode.com/problems/group-anagrams/', completed: false },
-                { time: '2:00 PM - 4:00 PM', task: 'Sys Design: Watch Gaurav Sen on Primer & Load Balancers', type: 'sys', link: 'https://www.youtube.com/watch?v=fMZadjdA_2s', completed: false },
-                { time: '5:00 PM - 6:00 PM', task: 'Review: Time/space complexity of today\'s problems', type: 'review', link: '', completed: false }
-            ];
-             plan['2025-08-17'] = [
-                { time: '9:00 AM - 11:00 AM', task: 'Active Recall: Re-solve "Group Anagrams" on whiteboard', type: 'review', link: 'https://leetcode.com/problems/group-anagrams/', completed: false },
-                { time: '11:00 AM - 1:00 PM', task: 'Sys Design: Whiteboard TinyURL design', type: 'sys', link: 'https://www.youtube.com/watch?v=fMZadjdA_2s', completed: false },
-                { time: '2:00 PM - 3:00 PM', task: 'Behavioral: Draft Situation & Task for first STAR story', type: 'behavioral', link: '', completed: false },
-                { time: '5:00 PM - 6:00 PM', task: 'Backup Slot / Planning', type: 'planning', link: '', completed: false }
-            ];
-            // ... (rest of the specific plan as before)
-            for (let i = 2; i < totalDays; i++) {
+        function generateFullPlan() {
+            const plan = {};
+            const dsaTopics = ["Arrays & Hashing", "Two Pointers", "Sliding Window", "Stacks", "Binary Search", "Linked Lists", "Trees", "Tries", "Heaps", "Backtracking", "Graphs", "Advanced Graphs", "1-D DP", "2-D DP", "Intervals", "Greedy", "Bit Manipulation"];
+            let dsaTopicIndex = 0;
+
+            for (let i = 0; i < totalDays; i++) {
                 const currentDate = new Date(startDate);
                 currentDate.setDate(startDate.getDate() + i);
                 const dateString = currentDate.toISOString().split('T')[0];
                 const dayOfWeek = currentDate.getDay();
+                const weekNum = Math.floor(i / 7);
                 let dailySchedule = [];
-                const isWeekend = (dayOfWeek === 6 || dayOfWeek === 0);
-                
-                if (isWeekend) {
-                    if (dayOfWeek === 6) {
-                        const topic = dsaTopics[dsaTopicIndex++ % dsaTopics.length];
-                        dailySchedule.push({ time: '9:00 AM - 1:00 PM', task: `DSA Deep Dive: ${topic}`, type: 'dsa' });
-                        dailySchedule.push({ time: '2:00 PM - 4:00 PM', task: `System Design: New Topic (e.g., Caching)`, type: 'sys' });
-                    } else {
-                        dailySchedule.push({ time: '9:00 AM - 11:00 AM', task: `Weekly DSA Review`, type: 'review' });
-                        dailySchedule.push({ time: '11:00 AM - 1:00 PM', task: `System Design: Whiteboard a system`, type: 'sys' });
-                        dailySchedule.push({ time: '2:00 PM - 3:00 PM', task: `Behavioral Prep: Refine STAR story`, type: 'behavioral' });
+
+                if (i < 14) { // First two weeks are hyper-specific
+                    if (dateString === '2025-08-16') {
+                        dailySchedule = [
+                            { time: '9:00 AM - 11:00 AM', task: 'DSA: Solve LC 1 (Two Sum) & LC 242 (Valid Anagram)', type: 'dsa', link: 'https://leetcode.com/problemset/', completed: false },
+                            { time: '11:00 AM - 1:00 PM', task: 'DSA: Solve LC 49 (Group Anagrams)', type: 'dsa', link: 'https://leetcode.com/problems/group-anagrams/', completed: false },
+                            { time: '2:00 PM - 4:00 PM', task: 'Sys Design: Watch Gaurav Sen on Primer & Load Balancers', type: 'sys', link: 'https://www.youtube.com/watch?v=fMZadjdA_2s', completed: false },
+                            { time: '5:00 PM - 6:00 PM', task: 'Review: Time/space complexity of today\'s problems', type: 'review', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-17') {
+                         dailySchedule = [
+                            { time: '9:00 AM - 11:00 AM', task: 'Active Recall: Re-solve "Group Anagrams" on whiteboard', type: 'review', link: 'https://leetcode.com/problems/group-anagrams/', completed: false },
+                            { time: '11:00 AM - 1:00 PM', task: 'Sys Design: Whiteboard TinyURL design', type: 'sys', link: 'https://www.youtube.com/watch?v=fMZadjdA_2s', completed: false },
+                            { time: '2:00 PM - 3:00 PM', task: 'Behavioral: Draft Situation & Task for first STAR story', type: 'behavioral', link: '', completed: false },
+                            { time: '5:00 PM - 6:00 PM', task: 'Backup Slot / Planning', type: 'planning', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-18') {
+                        dailySchedule = [
+                            { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 125 (Valid Palindrome)', type: 'dsa', link: 'https://leetcode.com/problems/valid-palindrome/', completed: false },
+                            { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on Caching', type: 'sys', link: 'https://www.youtube.com/watch?v=N_1_N63s_0M', completed: false },
+                            { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-19') {
+                        dailySchedule = [
+                            { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 15 (3Sum)', type: 'dsa', link: 'https://leetcode.com/problems/3sum/', completed: false },
+                            { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Hash Map patterns', type: 'review', link: '', completed: false },
+                            { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-20') {
+                        dailySchedule = [
+                            { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 11 (Container With Most Water)', type: 'dsa', link: 'https://leetcode.com/problems/container-with-most-water/', completed: false },
+                            { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on Databases', type: 'sys', link: 'https://www.youtube.com/watch?v=y-vL0kGjLpQ', completed: false },
+                            { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-21') {
+                        dailySchedule = [
+                            { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 121 (Best Time to Buy and Sell Stock)', type: 'dsa', link: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/', completed: false },
+                            { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Caching & Load Balancing', type: 'review', link: '', completed: false },
+                            { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-22') {
+                        dailySchedule = [
+                            { time: '9:00 PM - 10:30 PM', task: 'Behavioral: Complete STAR story (Action & Result)', type: 'behavioral', link: '', completed: false },
+                            { time: '10:30 PM - 11:00 PM', task: 'Weekly Review: Takeaways from Two Pointers pattern', type: 'review', link: '', completed: false },
+                            { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-23') {
+                        dailySchedule = [
+                            { time: '9:00 AM - 1:00 PM', task: 'DSA (Sliding Window): Solve LC 3, LC 424', type: 'dsa', link: 'https://leetcode.com/problemset/', completed: false },
+                            { time: '2:00 PM - 4:00 PM', task: 'Sys Design: Watch Gaurav Sen on Sharding & CDNs', type: 'sys', link: 'https://www.youtube.com/playlist?list=PLMCXHnjXnTnvo5-L0_2FzKscWgT1_AZE0', completed: false },
+                            { time: '5:00 PM - 6:00 PM', task: 'Review: Sliding Window template (expand/shrink conditions)', type: 'review', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-24') {
+                        dailySchedule = [
+                            { time: '9:00 AM - 11:00 AM', task: 'Active Recall: Re-solve LC 3 on whiteboard', type: 'review', link: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/', completed: false },
+                            { time: '11:00 AM - 1:00 PM', task: 'Sys Design: Whiteboard Instagram Feed', type: 'sys', link: '', completed: false },
+                            { time: '2:00 PM - 3:00 PM', task: 'Behavioral: Refine first STAR story (Action section)', type: 'behavioral', link: '', completed: false },
+                            { time: '5:00 PM - 6:00 PM', task: 'Backup Slot / Planning', type: 'planning', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-25') {
+                        dailySchedule = [
+                            { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 20 (Valid Parentheses)', type: 'dsa', link: 'https://leetcode.com/problems/valid-parentheses/', completed: false },
+                            { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on Message Queues', type: 'sys', link: 'https://www.youtube.com/watch?v=O_xT4Jb_Gk8', completed: false },
+                            { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-26') {
+                        dailySchedule = [
+                            { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 155 (Min Stack)', type: 'dsa', link: 'https://leetcode.com/problems/min-stack/', completed: false },
+                            { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Two Pointers pattern', type: 'review', link: '', completed: false },
+                            { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-27') {
+                        dailySchedule = [
+                            { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 739 (Daily Temperatures)', type: 'dsa', link: 'https://leetcode.com/problems/daily-temperatures/', completed: false },
+                            { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on API Gateways', type: 'sys', link: 'https://www.youtube.com/watch?v=T4D_0tG1P7s', completed: false },
+                            { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-28') {
+                        dailySchedule = [
+                            { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 853 (Car Fleet)', type: 'dsa', link: 'https://leetcode.com/problems/car-fleet/', completed: false },
+                            { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Sharding & CDNs', type: 'review', link: '', completed: false },
+                            { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+                        ];
+                    } else if (dateString === '2025-08-29') {
+                        dailySchedule = [
+                            { time: '9:00 PM - 10:30 PM', task: 'Behavioral: Write new STAR story (disagreement)', type: 'behavioral', link: '', completed: false },
+                            { time: '10:30 PM - 11:00 PM', task: 'Weekly Review: Takeaways from Stacks pattern', type: 'review', link: '', completed: false },
+                            { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+                        ];
                     }
-                    dailySchedule.push({ time: '5:00 PM - 6:00 PM', task: 'Backup Slot / Catch-up', type: 'planning' });
-                } else {
-                    dailySchedule.push({ time: '9:00 PM - 10:30 PM', task: `DSA Practice: 1 LeetCode problem`, type: 'dsa' });
-                    dailySchedule.push({ time: '10:30 PM - 11:00 PM', task: `System Design: Watch one short video`, type: 'sys' });
-                    dailySchedule.push({ time: '11:00 PM - 11:30 PM', task: 'Backup Slot / Catch-up', type: 'planning' });
+                } else { // Procedural generation for the rest
+                    const isWeekend = (dayOfWeek === 6 || dayOfWeek === 0);
+                    const month = Math.floor(i / 30);
+
+                    if (month < 4) { // Phase 1 & 2
+                        if (isWeekend) {
+                            if (dayOfWeek === 6) {
+                                const topic = dsaTopics[dsaTopicIndex++ % dsaTopics.length] || "Advanced Topics";
+                                dailySchedule.push({ time: '9:00 AM - 1:00 PM', task: `DSA Deep Dive: ${topic}`, type: 'dsa' });
+                                dailySchedule.push({ time: '2:00 PM - 4:00 PM', task: `System Design: New Topic (e.g., Read Alex Xu Ch ${weekNum - 1})`, type: 'sys' });
+                            } else {
+                                dailySchedule.push({ time: '9:00 AM - 11:00 AM', task: `Weekly DSA Review: Re-solve 2 problems from this week`, type: 'review' });
+                                dailySchedule.push({ time: '11:00 AM - 1:00 PM', task: `System Design: Whiteboard a system (e.g., Instagram)`, type: 'sys' });
+                                dailySchedule.push({ time: '2:00 PM - 3:00 PM', task: `Behavioral Prep: Write/Refine one STAR story`, type: 'behavioral' });
+                            }
+                        } else {
+                            dailySchedule.push({ time: '9:00 PM - 10:30 PM', task: `DSA Practice: 1-2 LeetCode problems (Medium)`, type: 'dsa' });
+                            if (i % 3 === 0) { // Spaced repetition for system design
+                                dailySchedule.push({ time: '10:30 PM - 11:00 PM', task: `Spaced Revision: Review past System Design notes`, type: 'review' });
+                            } else {
+                                dailySchedule.push({ time: '10:30 PM - 11:00 PM', task: `System Design: Read one chapter or watch one short video`, type: 'sys' });
+                            }
+                        }
+                    } else if (month === 4) { // Phase 3: Mocks
+                         if (dayOfWeek === 2 || dayOfWeek === 4) { // Tue/Thu
+                            dailySchedule = [{ time: '9:00 PM - 10:30 PM', task: 'Live Mock Interview (Pramp)', type: 'mock' }, { time: '10:30 PM - 11:00 PM', task: 'Analyze Mock Feedback', type: 'review' }];
+                        } else if (dayOfWeek === 6) {
+                            dailySchedule = [
+                                { time: '9:00 AM - 12:00 PM', task: 'Double Mock Session (DSA + System Design)', type: 'mock' },
+                                { time: '1:00 PM - 3:00 PM', task: 'Deep Dive on Mock Feedback', type: 'review' }
+                            ];
+                        } else {
+                             dailySchedule.push({ time: '9:00 PM - 11:00 PM', task: 'Targeted Practice based on Mock Feedback', type: 'dsa' });
+                        }
+                    } else { // Phase 4: Final Prep
+                        if (isWeekend) {
+                            dailySchedule.push({ time: '9:00 AM - 12:00 PM', task: 'Full Mock Loop Simulation (3 interviews)', type: 'mock' });
+                        } else {
+                            dailySchedule.push({ time: '9:00 PM - 11:00 PM', task: 'Solve Google-tagged LeetCode problems', type: 'dsa' });
+                        }
+                    }
+
+                    if (isWeekend) {
+                        dailySchedule.push({ time: '5:00 PM - 6:00 PM', task: 'Backup Slot / Catch-up', type: 'planning' });
+                    } else {
+                        dailySchedule.push({ time: '11:00 PM - 11:30 PM', task: 'Backup Slot / Catch-up', type: 'planning' });
+                    }
                 }
-                plan[dateString] = dailySchedule.map(task => ({ ...task, link: '', completed: false }));
+                plan[dateString] = dailySchedule.map(task => {
+                    let link = '';
+                    if (task.type === 'dsa') link = 'https://leetcode.com/problemset/';
+                    else if (task.type === 'sys') link = 'https://www.youtube.com/playlist?list=PLMCXHnjXnTnvo5-L0_2FzKscWgT1_AZE0';
+                    else if (task.type === 'mock') link = 'https://www.pramp.com/';
+                    return { ...task, link: link, completed: false };
+                });
             }
             return plan;
         }
         
-        let studyPlan = JSON.parse(localStorage.getItem('studyPlan')) || generateSpecificPlan();
+        let studyPlan = JSON.parse(localStorage.getItem('studyPlan')) || generateFullPlan();
         let currentDate = new Date(startDate);
 
         function savePlan() {
@@ -238,9 +354,12 @@
             tasksContainer.className = 'space-y-4';
 
             dailySchedule.forEach((item, index) => {
+                const isDark = document.documentElement.classList.contains('dark');
+                const taskColor = isDark ? taskTags[item.type]?.dark : taskTags[item.type]?.light;
+
                 const taskDiv = document.createElement('div');
                 taskDiv.className = `flex items-center p-3 rounded-lg space-x-4 border border-transparent ${item.completed ? 'task-completed' : ''}`;
-                taskDiv.style.backgroundColor = taskTags[item.type]?.color;
+                taskDiv.style.backgroundColor = taskColor || '#e2e8f0';
                 taskDiv.dataset.index = index;
                 
                 const checkbox = document.createElement('input');
@@ -250,7 +369,7 @@
                 
                 const tagSelector = document.createElement('select');
                 tagSelector.className = 'tag-selector flex-shrink-0';
-                tagSelector.style.backgroundColor = taskTags[item.type]?.color;
+                tagSelector.style.backgroundColor = taskColor || '#e2e8f0';
                 for(const tagKey in taskTags) {
                     const option = document.createElement('option');
                     option.value = tagKey;
@@ -260,18 +379,18 @@
                 }
                 
                 const contentDiv = document.createElement('div');
-                contentDiv.className = 'flex-grow flex flex-col sm:flex-row sm:items-center';
+                contentDiv.className = 'flex-grow flex flex-col sm:flex-row sm:items-center task-tag';
                 
                 const timeInput = document.createElement('input');
                 timeInput.type = 'text';
                 timeInput.value = item.time;
-                timeInput.className = 'time-input font-semibold text-light-text-primary dark:text-dark-text-primary sm:w-2/5';
+                timeInput.className = 'time-input font-semibold sm:w-2/5';
                 timeInput.dataset.field = 'time';
                 
                 const taskInput = document.createElement('input');
                 taskInput.type = 'text';
                 taskInput.value = item.task;
-                taskInput.className = 'task-input text-light-text-secondary dark:text-dark-text-secondary sm:w-3/5 sm:ml-4 mt-1 sm:mt-0';
+                taskInput.className = 'task-input sm:w-3/5 sm:ml-4 mt-1 sm:mt-0';
                 taskInput.dataset.field = 'task';
                 
                 contentDiv.appendChild(timeInput);
@@ -313,8 +432,10 @@
             } else if (target.classList.contains('tag-selector')) {
                 const newType = target.value;
                 studyPlan[date][index].type = newType;
-                taskDiv.style.backgroundColor = taskTags[newType].color;
-                target.style.backgroundColor = taskTags[newType].color;
+                const isDark = document.documentElement.classList.contains('dark');
+                const newColor = isDark ? taskTags[newType].dark : taskTags[newType].light;
+                taskDiv.style.backgroundColor = newColor;
+                target.style.backgroundColor = newColor;
             } else if (target.classList.contains('time-input') || target.classList.contains('task-input')) {
                 studyPlan[date][index][target.dataset.field] = target.value;
             }
@@ -381,6 +502,7 @@
                 themeIconLight.classList.remove('hidden');
                 themeIconDark.classList.add('hidden');
             }
+            renderCurrentDay(); // Re-render to apply new tag colors
         }
 
         themeToggle.addEventListener('click', () => {
