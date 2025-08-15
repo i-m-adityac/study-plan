@@ -61,6 +61,11 @@
             overflow: hidden;
             transition: max-height 0.3s ease-out;
         }
+        /* Style for the date picker icon */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -95,7 +100,6 @@
                     <div class="accordion-item border-b border-slate-200 pb-4">
                         <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold text-slate-800">
                             <span> Pillars: A Parallel Approach to DSA & System Design</span>
-                            <span class="transform transition-transform duration-300">▼</span>
                         </button>
                         <div class="accordion-content text-slate-600 pt-4 space-y-4">
                             <p>For an SDE II, DSA and System Design must be studied in parallel. System design concepts need time to mature, while DSA skills require consistent practice.</p>
@@ -168,23 +172,17 @@
         </section>
 
         <div class="sticky-header bg-slate-50/80 backdrop-blur-lg py-4 mb-8 border-b border-slate-200">
-            <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-                <div class="flex items-center space-x-4">
-                    <label for="month-selector" class="font-semibold">Go to Month:</label>
-                    <select id="month-selector" class="p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-sky-500"></select>
+             <div class="flex justify-between items-center max-w-4xl mx-auto">
+                <button id="prev-day" class="px-4 py-2 bg-white border border-slate-300 rounded-md shadow-sm font-semibold hover:bg-slate-100 transition-colors">&lt; Prev</button>
+                <div class="flex items-center space-x-2">
+                    <input type="date" id="date-picker" class="p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-sky-500">
                 </div>
-                <div id="legend" class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
-                    <span class="flex items-center"><span class="w-3 h-3 rounded-full" style="background-color: #bae6fd;"></span><span class="ml-2">DSA</span></span>
-                    <span class="flex items-center"><span class="w-3 h-3 rounded-full" style="background-color: #a7f3d0;"></span><span class="ml-2">System Design</span></span>
-                    <span class="flex items-center"><span class="w-3 h-3 rounded-full" style="background-color: #fde68a;"></span><span class="ml-2">Revision</span></span>
-                    <span class="flex items-center"><span class="w-3 h-3 rounded-full" style="background-color: #c7d2fe;"></span><span class="ml-2">Behavioral</span></span>
-                    <span class="flex items-center"><span class="w-3 h-3 rounded-full" style="background-color: #fecdd3;"></span><span class="ml-2">Mock Interview</span></span>
-                </div>
+                <button id="next-day" class="px-4 py-2 bg-white border border-slate-300 rounded-md shadow-sm font-semibold hover:bg-slate-100 transition-colors">Next &gt;</button>
             </div>
         </div>
 
-        <main id="plan-container" class="space-y-12">
-            <!-- Daily plans will be injected here by JavaScript -->
+        <main id="plan-container" class="max-w-4xl mx-auto">
+            <!-- Daily plan will be injected here by JavaScript -->
         </main>
 
     </div>
@@ -192,8 +190,11 @@
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const planContainer = document.getElementById('plan-container');
-        const monthSelector = document.getElementById('month-selector');
+        const datePicker = document.getElementById('date-picker');
+        const prevDayButton = document.getElementById('prev-day');
+        const nextDayButton = document.getElementById('next-day');
         const accordionContainer = document.getElementById('accordion-container');
+        
         const startDate = new Date('2025-08-16T00:00:00');
         const totalDays = 182; // Approx 6 months
         
@@ -381,99 +382,84 @@
         }
         
         let studyPlan = JSON.parse(localStorage.getItem('studyPlan')) || generateSpecificPlan();
+        let currentDate = new Date(startDate);
 
         function savePlan() {
             localStorage.setItem('studyPlan', JSON.stringify(studyPlan));
         }
 
-        function renderPlan() {
-            planContainer.innerHTML = '';
-            const months = {};
-            Object.keys(studyPlan).sort().forEach(dateString => {
-                const date = new Date(dateString + 'T00:00:00');
-                const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
-                if (!months[monthYear]) months[monthYear] = [];
-                months[monthYear].push(dateString);
+        function renderCurrentDay() {
+            const dateString = currentDate.toISOString().split('T')[0];
+            datePicker.value = dateString;
+            planContainer.innerHTML = ''; // Clear previous day's view
+
+            const dailySchedule = studyPlan[dateString] || [];
+            
+            const dayCard = document.createElement('div');
+            dayCard.className = 'bg-white rounded-lg shadow-md p-4 flex flex-col';
+            dayCard.dataset.date = dateString;
+            
+            const dayHeader = document.createElement('h3');
+            dayHeader.className = 'font-bold text-2xl mb-4 text-center';
+            dayHeader.textContent = currentDate.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+            dayCard.appendChild(dayHeader);
+            
+            const tasksContainer = document.createElement('div');
+            tasksContainer.className = 'space-y-2';
+
+            dailySchedule.forEach((item, index) => {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = `flex items-center p-2 rounded-md space-x-2 ${item.completed ? 'task-completed' : ''}`;
+                taskDiv.style.backgroundColor = taskTags[item.type]?.color || taskTags.planning.color;
+                taskDiv.dataset.index = index;
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = item.completed;
+                checkbox.className = 'flex-shrink-0 h-5 w-5 rounded text-sky-600 focus:ring-sky-500 border-slate-300';
+                const tagSelector = document.createElement('select');
+                tagSelector.className = 'tag-selector flex-shrink-0';
+                tagSelector.style.backgroundColor = taskTags[item.type]?.color || taskTags.planning.color;
+                for(const tagKey in taskTags) {
+                    const option = document.createElement('option');
+                    option.value = tagKey;
+                    option.textContent = taskTags[tagKey].name;
+                    if(tagKey === item.type) option.selected = true;
+                    tagSelector.appendChild(option);
+                }
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'flex-grow flex items-center';
+                const timeInput = document.createElement('input');
+                timeInput.type = 'text';
+                timeInput.value = item.time;
+                timeInput.className = 'time-input font-semibold text-slate-700 w-2/5';
+                timeInput.dataset.field = 'time';
+                const taskInput = document.createElement('input');
+                taskInput.type = 'text';
+                taskInput.value = item.task;
+                taskInput.className = 'task-input text-slate-800 w-3/5 ml-2';
+                taskInput.dataset.field = 'task';
+                contentDiv.appendChild(timeInput);
+                contentDiv.appendChild(taskInput);
+                const linkContainer = document.createElement('div');
+                linkContainer.className = 'link-container flex-shrink-0 ml-2';
+                if (item.link) {
+                    const link = document.createElement('a');
+                    link.href = item.link;
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    link.textContent = '🔗';
+                    link.className = 'link-button';
+                    linkContainer.appendChild(link);
+                }
+                taskDiv.appendChild(checkbox);
+                taskDiv.appendChild(tagSelector);
+                taskDiv.appendChild(contentDiv);
+                taskDiv.appendChild(linkContainer);
+                tasksContainer.appendChild(taskDiv);
             });
-            monthSelector.innerHTML = Object.keys(months).map(my => `<option value="${my}">${my}</option>`).join('');
-            for (const monthYear in months) {
-                const monthDiv = document.createElement('div');
-                monthDiv.id = monthYear;
-                monthDiv.className = 'month-section scroll-mt-24';
-                const monthHeader = document.createElement('h2');
-                monthHeader.className = 'text-3xl font-bold text-slate-800 mb-6 border-b-2 border-sky-500 pb-2';
-                monthHeader.textContent = monthYear;
-                monthDiv.appendChild(monthHeader);
-                const grid = document.createElement('div');
-                grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
-                months[monthYear].forEach(dateString => {
-                    const dailySchedule = studyPlan[dateString];
-                    const date = new Date(dateString + 'T00:00:00');
-                    const dayCard = document.createElement('div');
-                    dayCard.className = 'bg-white rounded-lg shadow-md p-4 flex flex-col';
-                    dayCard.dataset.date = dateString;
-                    const dayHeader = document.createElement('h3');
-                    dayHeader.className = 'font-bold text-lg mb-3';
-                    dayHeader.textContent = date.toLocaleString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
-                    dayCard.appendChild(dayHeader);
-                    const tasksContainer = document.createElement('div');
-                    tasksContainer.className = 'space-y-2';
-                    dailySchedule.forEach((item, index) => {
-                        const taskDiv = document.createElement('div');
-                        taskDiv.className = `flex items-center p-2 rounded-md space-x-2 ${item.completed ? 'task-completed' : ''}`;
-                        taskDiv.style.backgroundColor = taskTags[item.type]?.color || taskTags.planning.color;
-                        taskDiv.dataset.index = index;
-                        const checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.checked = item.completed;
-                        checkbox.className = 'flex-shrink-0 h-5 w-5 rounded text-sky-600 focus:ring-sky-500 border-slate-300';
-                        const tagSelector = document.createElement('select');
-                        tagSelector.className = 'tag-selector flex-shrink-0';
-                        tagSelector.style.backgroundColor = taskTags[item.type]?.color || taskTags.planning.color;
-                        for(const tagKey in taskTags) {
-                            const option = document.createElement('option');
-                            option.value = tagKey;
-                            option.textContent = taskTags[tagKey].name;
-                            if(tagKey === item.type) option.selected = true;
-                            tagSelector.appendChild(option);
-                        }
-                        const contentDiv = document.createElement('div');
-                        contentDiv.className = 'flex-grow flex items-center';
-                        const timeInput = document.createElement('input');
-                        timeInput.type = 'text';
-                        timeInput.value = item.time;
-                        timeInput.className = 'time-input font-semibold text-slate-700 w-2/5';
-                        timeInput.dataset.field = 'time';
-                        const taskInput = document.createElement('input');
-                        taskInput.type = 'text';
-                        taskInput.value = item.task;
-                        taskInput.className = 'task-input text-slate-800 w-3/5 ml-2';
-                        taskInput.dataset.field = 'task';
-                        contentDiv.appendChild(timeInput);
-                        contentDiv.appendChild(taskInput);
-                        const linkContainer = document.createElement('div');
-                        linkContainer.className = 'link-container flex-shrink-0 ml-2';
-                        if (item.link) {
-                            const link = document.createElement('a');
-                            link.href = item.link;
-                            link.target = '_blank';
-                            link.rel = 'noopener noreferrer';
-                            link.textContent = '�';
-                            link.className = 'link-button';
-                            linkContainer.appendChild(link);
-                        }
-                        taskDiv.appendChild(checkbox);
-                        taskDiv.appendChild(tagSelector);
-                        taskDiv.appendChild(contentDiv);
-                        taskDiv.appendChild(linkContainer);
-                        tasksContainer.appendChild(taskDiv);
-                    });
-                    dayCard.appendChild(tasksContainer);
-                    grid.appendChild(dayCard);
-                });
-                monthDiv.appendChild(grid);
-                planContainer.appendChild(monthDiv);
-            }
+            
+            dayCard.appendChild(tasksContainer);
+            planContainer.appendChild(dayCard);
         }
 
         planContainer.addEventListener('change', (e) => {
@@ -511,27 +497,27 @@
                 if (newLink !== null) {
                     studyPlan[date][index].link = newLink.trim();
                     savePlan();
-                    
-                    const linkContainer = taskDiv.querySelector('.link-container');
-                    linkContainer.innerHTML = '';
-                    if (studyPlan[date][index].link) {
-                        const link = document.createElement('a');
-                        link.href = studyPlan[date][index].link;
-                        link.target = '_blank';
-                        link.rel = 'noopener noreferrer';
-                        link.textContent = '🔗';
-                        link.className = 'link-button';
-                        linkContainer.appendChild(link);
-                    }
+                    renderCurrentDay();
                 }
             }
         });
         
-        monthSelector.addEventListener('change', (e) => {
-            const selectedMonth = document.getElementById(e.target.value);
-            if (selectedMonth) {
-                selectedMonth.scrollIntoView({ behavior: 'smooth' });
-            }
+        prevDayButton.addEventListener('click', () => {
+            currentDate.setDate(currentDate.getDate() - 1);
+            renderCurrentDay();
+        });
+
+        nextDayButton.addEventListener('click', () => {
+            currentDate.setDate(currentDate.getDate() + 1);
+            renderCurrentDay();
+        });
+
+        datePicker.addEventListener('change', (e) => {
+            // The value is in YYYY-MM-DD format, which JS new Date() can parse incorrectly due to timezones.
+            // We need to parse it as UTC to avoid off-by-one day errors.
+            const [year, month, day] = e.target.value.split('-').map(Number);
+            currentDate = new Date(Date.UTC(year, month - 1, day));
+            renderCurrentDay();
         });
 
         accordionContainer.addEventListener('click', (e) => {
@@ -549,9 +535,8 @@
             }
         });
 
-        renderPlan();
+        renderCurrentDay();
     });
     </script>
 </body>
 </html>
-�
