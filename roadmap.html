@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive FAANG Study Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .task-input, .time-input {
+            background-color: transparent;
+            border: none;
+            width: 100%;
+            padding: 2px;
+            margin: -2px;
+            border-radius: 4px;
+        }
+        .task-input:focus, .time-input:focus {
+            outline: 2px solid #38bdf8; /* sky-400 */
+            background-color: white;
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .tag-selector {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-color: transparent;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #e2e8f0; /* slate-200 */
+        }
+        .link-button {
+            cursor: pointer;
+            font-size: 1.1rem;
+            text-decoration: none;
+            color: #475569; /* slate-600 */
+            transition: transform 0.2s;
+        }
+        .link-button:hover {
+            transform: scale(1.1);
+        }
+        .task-completed .time-input, .task-completed .task-input {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Your Interactive 6-Month FAANG Campaign</h1>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto">A scientific, day-by-day plan integrating high-level strategy with daily execution. Your changes are saved automatically.</p>
+        </header>
+
+        <section id="strategy-guide" class="mb-12">
+            <div class="bg-white rounded-lg shadow-md p-6 max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold text-center mb-6">The Strategic Foundation</h2>
+                <div class="space-y-4" id="accordion-container">
+                    <!-- Accordion Item 1: Mindset -->
+                    <div class="accordion-item border-b border-slate-200 pb-4">
+                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold text-slate-800">
+                            <span>🧠 The SDE II Mindset: Beyond Implementation</span>
+                            <span class="transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="accordion-content text-slate-600 pt-4 space-y-2">
+                            <p>The leap to SDE II is about evolving from a coder to an architect and owner. Focus on demonstrating these traits:</p>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li><strong>Ownership & Autonomy:</strong> Drive features end-to-end, from design to deployment and support. Your professional projects are the best evidence of this.</li>
+                                <li><strong>Dealing with Ambiguity:</strong> Ask clarifying questions, state assumptions, and define the problem when faced with vague requirements in system design interviews.</li>
+                                <li><strong>Architectural Thinking:</strong> Design systems that are scalable, reliable, and maintainable. Always be ready to articulate the "why" behind your technical trade-offs.</li>
+                                <li><strong>Thinking Out Loud:</strong> The interview is a performance of your thought process. Narrate your journey from brute-force to optimal solutions.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Accordion Item 2: Technical Pillars -->
+                    <div class="accordion-item border-b border-slate-200 pb-4">
+                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold text-slate-800">
+                            <span> Pillars: A Parallel Approach to DSA & System Design</span>
+                            <span class="transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="accordion-content text-slate-600 pt-4 space-y-4">
+                            <p>For an SDE II, DSA and System Design must be studied in parallel. System design concepts need time to mature, while DSA skills require consistent practice.</p>
+                            <div>
+                                <h4 class="font-semibold text-slate-700">Data Structures & Algorithms (DSA)</h4>
+                                <p>The goal is deep pattern recognition, not memorization. Master these core topics:</p>
+                                <ul class="list-disc list-inside text-sm mt-1">
+                                    <li><strong>Core Structures:</strong> Arrays, Hash Tables, Linked Lists, Stacks, Queues, Trees, Graphs, Heaps.</li>
+                                    <li><strong>Key Patterns:</strong> Two Pointers, Sliding Window, Backtracking, Binary Search, Tree/Graph Traversals (BFS, DFS), Dynamic Programming.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-700">System Design</h4>
+                                <p>This is where you demonstrate seniority. Master the building blocks of scalable systems:</p>
+                                <ul class="list-disc list-inside text-sm mt-1">
+                                    <li><strong>HLD Concepts:</strong> Scalability, Caching, Load Balancing, CDNs, Message Queues, Databases (SQL vs. NoSQL), Sharding, CAP Theorem.</li>
+                                    <li><strong>LLD/OOD:</strong> SOLID principles and common design patterns (Singleton, Factory, Observer).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Accordion Item 3: Behavioral -->
+                    <div class="accordion-item border-b border-slate-200 pb-4">
+                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold text-slate-800">
+                            <span>💬 Behavioral Excellence: The STAR Method & "Googlyness"</span>
+                            <span class="transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="accordion-content text-slate-600 pt-4 space-y-2">
+                            <p>Structure your stories using the STAR method to provide clear, compelling, and impactful answers. Calibrate your stories to an SDE II level by focusing on impact and scope.</p>
+                            <ul class="list-none space-y-1">
+                                <li><strong>S - Situation:</strong> Briefly set the scene with a specific event.</li>
+                                <li><strong>T - Task:</strong> State your specific responsibility or goal.</li>
+                                <li><strong>A - Action:</strong> Describe the specific steps *you* took. Use "I" statements.</li>
+                                <li><strong>R - Result:</strong> Conclude by explaining the outcome. Quantify the impact with metrics whenever possible.</li>
+                            </ul>
+                            <p class="pt-2">Prepare stories that align with "Googlyness": intellectual curiosity, comfort with ambiguity, a collaborative spirit, and a bias for action.</p>
+                        </div>
+                    </div>
+                     <!-- Accordion Item 4: Secondary Priorities -->
+                    <div class="accordion-item border-b border-slate-200 pb-4">
+                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold text-slate-800">
+                            <span>🎯 Secondary Priorities: Projects & AI/ML</span>
+                            <span class="transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="accordion-content text-slate-600 pt-4 space-y-2">
+                           <h4 class="font-semibold text-slate-700">Personal Projects: Leverage, Don't Build</h4>
+                           <p>Your two years of professional experience are more valuable than a new side project. Do not start a new project. Instead, prepare to discuss the architecture, challenges, and business impact of your professional work in depth.</p>
+                           <h4 class="font-semibold text-slate-700 mt-2">AI/ML: Awareness, Not Expertise</h4>
+                           <p>For a generalist SDE II role, deep AI/ML knowledge is not required. Demonstrate awareness by treating components like "recommendation engines" as black-box microservices in system design. Discuss their architectural implications (APIs, latency) rather than their internal workings.</p>
+                        </div>
+                    </div>
+                     <!-- Accordion Item 5: Resources -->
+                    <div class="accordion-item">
+                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold text-slate-800">
+                            <span>📚 Curated Resources</span>
+                            <span class="transform transition-transform duration-300">▼</span>
+                        </button>
+                        <div class="accordion-content text-slate-600 pt-4 space-y-2">
+                            <ul class="list-disc list-inside space-y-1">
+                                <li><strong>DSA Foundation:</strong> "Cracking the Coding Interview" (CCI), HelloInterview</li>
+                                <li><strong>DSA Practice:</strong> LeetCode / LeetCode Premium</li>
+                                <li><strong>System Design Foundation:</strong> Gaurav Sen's YouTube Playlist, "System Design Interview" by Alex Xu</li>
+                                <li><strong>System Design Deep Dive:</strong> "Designing Data-Intensive Applications"</li>
+                                <li><strong>Mock Interviews:</strong> Pramp</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="sticky-header bg-slate-50/80 backdrop-blur-lg py-4 mb-8 border-b border-slate-200">
+            <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                <div class="flex items-center space-x-4">
+                    <label for="month-selector" class="font-semibold">Go to Month:</label>
+                    <select id="month-selector" class="p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-sky-500"></select>
+                </div>
+                <div id="legend" class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
+                    <span class="flex items-center"><span class="w-3 h-3 rounded-full" style="background-color: #bae6fd;"></span><span class="ml-2">DSA</span></span>
+                    <span class="flex items-center"><span class="w-3 h-3 rounded-full" style="background-color: #a7f3d0;"></span><span class="ml-2">System Design</span></span>
+                    <span class="flex items-center"><span class="w-3 h-3 rounded-full" style="background-color: #fde68a;"></span><span class="ml-2">Revision</span></span>
+                    <span class="flex items-center"><span class="w-3 h-3 rounded-full" style="background-color: #c7d2fe;"></span><span class="ml-2">Behavioral</span></span>
+                    <span class="flex items-center"><span class="w-3 h-3 rounded-full" style="background-color: #fecdd3;"></span><span class="ml-2">Mock Interview</span></span>
+                </div>
+            </div>
+        </div>
+
+        <main id="plan-container" class="space-y-12">
+            <!-- Daily plans will be injected here by JavaScript -->
+        </main>
+
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const planContainer = document.getElementById('plan-container');
+        const monthSelector = document.getElementById('month-selector');
+        const accordionContainer = document.getElementById('accordion-container');
+        const startDate = new Date('2025-08-16T00:00:00');
+        const totalDays = 182; // Approx 6 months
+        
+        const taskTags = {
+            dsa: { color: '#bae6fd', name: 'DSA' },
+            sys: { color: '#a7f3d0', name: 'System Design' },
+            review: { color: '#fde68a', name: 'Revision' },
+            behavioral: { color: '#c7d2fe', name: 'Behavioral' },
+            mock: { color: '#fecdd3', name: 'Mock Interview' },
+            planning: { color: '#e2e8f0', name: 'Planning' }
+        };
+
+        const dsaTopics = [
+            "Arrays & Hashing", "Two Pointers", "Sliding Window", "Stacks", "Binary Search", "Linked Lists",
+            "Trees - Traversal & BSTs", "Tries", "Heaps / Priority Queues", "Backtracking", "Graphs - BFS & DFS",
+            "Graphs - Advanced", "Dynamic Programming - 1D", "Dynamic Programming - 2D", "Intervals", "Greedy",
+            "Bit Manipulation"
+        ];
+        
+        let dsaTopicIndex = 0;
+        const revisionQueue = [];
+
+        function getNextDsaTopic() {
+            const topic = dsaTopics[dsaTopicIndex % dsaTopics.length];
+            dsaTopicIndex++;
+            return topic;
+        }
+        
+        function generateSpecificPlan() {
+            let plan = {};
+            // Week 1: Specific Plan
+            plan['2025-08-16'] = [
+                { time: '9:00 AM - 11:00 AM', task: 'DSA: Solve LC 1 (Two Sum) & LC 242 (Valid Anagram)', type: 'dsa', link: 'https://leetcode.com/problemset/', completed: false },
+                { time: '11:00 AM - 1:00 PM', task: 'DSA: Solve LC 49 (Group Anagrams)', type: 'dsa', link: 'https://leetcode.com/problems/group-anagrams/', completed: false },
+                { time: '2:00 PM - 4:00 PM', task: 'Sys Design: Watch Gaurav Sen on Primer & Load Balancers', type: 'sys', link: 'https://www.youtube.com/watch?v=fMZadjdA_2s', completed: false },
+                { time: '5:00 PM - 6:00 PM', task: 'Review: Time/space complexity of today\'s problems', type: 'review', link: '', completed: false }
+            ];
+             plan['2025-08-17'] = [
+                { time: '9:00 AM - 11:00 AM', task: 'Active Recall: Re-solve "Group Anagrams" on whiteboard', type: 'review', link: 'https://leetcode.com/problems/group-anagrams/', completed: false },
+                { time: '11:00 AM - 1:00 PM', task: 'Sys Design: Whiteboard TinyURL design', type: 'sys', link: 'https://www.youtube.com/watch?v=fMZadjdA_2s', completed: false },
+                { time: '2:00 PM - 3:00 PM', task: 'Behavioral: Draft Situation & Task for first STAR story', type: 'behavioral', link: '', completed: false },
+                { time: '5:00 PM - 6:00 PM', task: 'Backup Slot / Planning', type: 'planning', link: '', completed: false }
+            ];
+            plan['2025-08-18'] = [
+                { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 125 (Valid Palindrome)', type: 'dsa', link: 'https://leetcode.com/problems/valid-palindrome/', completed: false },
+                { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on Caching', type: 'sys', link: 'https://www.youtube.com/watch?v=N_1_N63s_0M', completed: false },
+                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+            ];
+            plan['2025-08-19'] = [
+                { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 15 (3Sum)', type: 'dsa', link: 'https://leetcode.com/problems/3sum/', completed: false },
+                { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Hash Map patterns', type: 'review', link: '', completed: false },
+                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+            ];
+            plan['2025-08-20'] = [
+                { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 11 (Container With Most Water)', type: 'dsa', link: 'https://leetcode.com/problems/container-with-most-water/', completed: false },
+                { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on Databases', type: 'sys', link: 'https://www.youtube.com/watch?v=y-vL0kGjLpQ', completed: false },
+                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+            ];
+            plan['2025-08-21'] = [
+                { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 121 (Best Time to Buy and Sell Stock)', type: 'dsa', link: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/', completed: false },
+                { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Caching & Load Balancing', type: 'review', link: '', completed: false },
+                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+            ];
+            plan['2025-08-22'] = [
+                { time: '9:00 PM - 10:30 PM', task: 'Behavioral: Complete STAR story (Action & Result)', type: 'behavioral', link: '', completed: false },
+                { time: '10:30 PM - 11:00 PM', task: 'Weekly Review: Takeaways from Two Pointers pattern', type: 'review', link: '', completed: false },
+                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+            ];
+             // Week 2: Specific Plan
+            plan['2025-08-23'] = [
+                { time: '9:00 AM - 1:00 PM', task: 'DSA (Sliding Window): Solve LC 3, LC 424', type: 'dsa', link: 'https://leetcode.com/problemset/', completed: false },
+                { time: '2:00 PM - 4:00 PM', task: 'Sys Design: Watch Gaurav Sen on Sharding & CDNs', type: 'sys', link: 'https://www.youtube.com/playlist?list=PLMCXHnjXnTnvo5-L0_2FzKscWgT1_AZE0', completed: false },
+                { time: '5:00 PM - 6:00 PM', task: 'Review: Sliding Window template (expand/shrink conditions)', type: 'review', link: '', completed: false }
+            ];
+            plan['2025-08-24'] = [
+                { time: '9:00 AM - 11:00 AM', task: 'Active Recall: Re-solve LC 3 on whiteboard', type: 'review', link: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/', completed: false },
+                { time: '11:00 AM - 1:00 PM', task: 'Sys Design: Whiteboard Instagram Feed', type: 'sys', link: '', completed: false },
+                { time: '2:00 PM - 3:00 PM', task: 'Behavioral: Refine first STAR story (Action section)', type: 'behavioral', link: '', completed: false },
+                { time: '5:00 PM - 6:00 PM', task: 'Backup Slot / Planning', type: 'planning', link: '', completed: false }
+            ];
+            plan['2025-08-25'] = [
+                { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 20 (Valid Parentheses)', type: 'dsa', link: 'https://leetcode.com/problems/valid-parentheses/', completed: false },
+                { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on Message Queues', type: 'sys', link: 'https://www.youtube.com/watch?v=O_xT4Jb_Gk8', completed: false },
+                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+            ];
+            plan['2025-08-26'] = [
+                { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 155 (Min Stack)', type: 'dsa', link: 'https://leetcode.com/problems/min-stack/', completed: false },
+                { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Two Pointers pattern', type: 'review', link: '', completed: false },
+                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+            ];
+            plan['2025-08-27'] = [
+                { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 739 (Daily Temperatures)', type: 'dsa', link: 'https://leetcode.com/problems/daily-temperatures/', completed: false },
+                { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on API Gateways', type: 'sys', link: 'https://www.youtube.com/watch?v=T4D_0tG1P7s', completed: false },
+                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+            ];
+            plan['2025-08-28'] = [
+                { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 853 (Car Fleet)', type: 'dsa', link: 'https://leetcode.com/problems/car-fleet/', completed: false },
+                { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Sharding & CDNs', type: 'review', link: '', completed: false },
+                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+            ];
+            plan['2025-08-29'] = [
+                { time: '9:00 PM - 10:30 PM', task: 'Behavioral: Write new STAR story (disagreement)', type: 'behavioral', link: '', completed: false },
+                { time: '10:30 PM - 11:00 PM', task: 'Weekly Review: Takeaways from Stacks pattern', type: 'review', link: '', completed: false },
+                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
+            ];
+            
+            // Procedurally generate the rest
+            for (let i = 14; i < totalDays; i++) {
+                 const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+                const dateString = currentDate.toISOString().split('T')[0];
+                const dayOfWeek = currentDate.getDay();
+                let dailySchedule = [];
+                const isWeekend = (dayOfWeek === 6 || dayOfWeek === 0);
+                if (dayOfWeek === 1) {
+                    const lastWeekTopic = dsaTopics[(dsaTopicIndex - 1 + dsaTopics.length) % dsaTopics.length];
+                     if(lastWeekTopic) {
+                        revisionQueue.push({ topic: `DSA: ${lastWeekTopic}`, date: new Date(currentDate), intervals: [7, 21] });
+                        revisionQueue.push({ topic: 'System Design Concepts from last week', date: new Date(currentDate), intervals: [7, 21] });
+                    }
+                }
+                const revisionTasks = [];
+                revisionQueue.forEach(item => {
+                    const daysSince = Math.floor((currentDate - item.date) / (1000 * 60 * 60 * 24));
+                    if (item.intervals.includes(daysSince)) {
+                        revisionTasks.push({ task: `Spaced Revision: ${item.topic}`, type: 'review' });
+                    }
+                });
+                if (isWeekend) {
+                    if (dayOfWeek === 6) {
+                        const topic = getNextDsaTopic();
+                        dailySchedule.push({ time: '9:00 AM - 11:00 AM', task: `DSA Deep Dive: ${topic} (Problem 1 & 2)`, type: 'dsa' });
+                        dailySchedule.push({ time: '11:00 AM - 1:00 PM', task: `DSA Deep Dive: ${topic} (Problem 3 & Pattern Study)`, type: 'dsa' });
+                        dailySchedule.push({ time: '2:00 PM - 4:00 PM', task: `System Design: Watch/Read on a new topic (e.g., Caching)`, type: 'sys' });
+                    } else {
+                        dailySchedule.push({ time: '9:00 AM - 11:00 AM', task: `Weekly DSA Review: Re-solve Saturday's problems`, type: 'review' });
+                        dailySchedule.push({ time: '11:00 AM - 1:00 PM', task: `System Design: Whiteboard a system (e.g., TinyURL)`, type: 'sys' });
+                        dailySchedule.push({ time: '2:00 PM - 3:00 PM', task: `Behavioral Prep: Write/Refine one STAR story`, type: 'behavioral' });
+                    }
+                } else {
+                    dailySchedule.push({ time: '9:00 PM - 10:30 PM', task: `DSA Practice: 1 LeetCode problem on this week's topic`, type: 'dsa' });
+                    dailySchedule.push({ time: '10:30 PM - 11:00 PM', task: `System Design: Read one chapter or watch one short video`, type: 'sys' });
+                }
+                if (revisionTasks.length > 0) {
+                     if(isWeekend) {
+                         dailySchedule.push({ time: '4:00 PM - 5:00 PM', task: revisionTasks.map(t => t.task).join('; '), type: 'review' });
+                     } else {
+                         dailySchedule[1] = { time: '10:30 PM - 11:00 PM', task: revisionTasks[0].task, type: 'review' };
+                     }
+                }
+                const month = Math.floor(i / 30);
+                if (month >= 4) {
+                    if(dayOfWeek === 2 || dayOfWeek === 4) {
+                        dailySchedule = [{ time: '9:00 PM - 10:30 PM', task: 'Live Mock Interview (Pramp)', type: 'mock' }, { time: '10:30 PM - 11:00 PM', task: 'Analyze Mock Feedback', type: 'review' }];
+                    }
+                    if(dayOfWeek === 6) {
+                        dailySchedule[2] = { time: '2:00 PM - 4:00 PM', task: 'Double Mock Session (DSA + System Design)', type: 'mock' };
+                    }
+                }
+                if (month >= 5) {
+                     if(isWeekend) {
+                         dailySchedule[1] = { time: '11:00 AM - 1:00 PM', task: 'Google-tagged LeetCode problems', type: 'dsa' };
+                     } else {
+                         dailySchedule[0] = { time: '9:00 PM - 10:30 PM', task: 'Google-tagged LeetCode problems', type: 'dsa' };
+                     }
+                }
+                if (isWeekend) {
+                    dailySchedule.push({ time: '5:00 PM - 6:00 PM', task: 'Backup Slot / Catch-up', type: 'planning' });
+                } else {
+                    dailySchedule.push({ time: '11:00 PM - 11:30 PM', task: 'Backup Slot / Catch-up', type: 'planning' });
+                }
+                plan[dateString] = dailySchedule.map(task => {
+                    let link = '';
+                    if (task.type === 'dsa') {
+                        link = 'https://leetcode.com/problemset/';
+                    } else if (task.type === 'sys') {
+                        link = 'https://www.youtube.com/playlist?list=PLMCXHnjXnTnvo5-L0_2FzKscWgT1_AZE0';
+                    } else if (task.type === 'mock') {
+                        link = 'https://www.pramp.com/';
+                    }
+                    return { ...task, link: link, completed: false };
+                });
+            }
+            return plan;
+        }
+        
+        let studyPlan = JSON.parse(localStorage.getItem('studyPlan')) || generateSpecificPlan();
+
+        function savePlan() {
+            localStorage.setItem('studyPlan', JSON.stringify(studyPlan));
+        }
+
+        function renderPlan() {
+            planContainer.innerHTML = '';
+            const months = {};
+            Object.keys(studyPlan).sort().forEach(dateString => {
+                const date = new Date(dateString + 'T00:00:00');
+                const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                if (!months[monthYear]) months[monthYear] = [];
+                months[monthYear].push(dateString);
+            });
+            monthSelector.innerHTML = Object.keys(months).map(my => `<option value="${my}">${my}</option>`).join('');
+            for (const monthYear in months) {
+                const monthDiv = document.createElement('div');
+                monthDiv.id = monthYear;
+                monthDiv.className = 'month-section scroll-mt-24';
+                const monthHeader = document.createElement('h2');
+                monthHeader.className = 'text-3xl font-bold text-slate-800 mb-6 border-b-2 border-sky-500 pb-2';
+                monthHeader.textContent = monthYear;
+                monthDiv.appendChild(monthHeader);
+                const grid = document.createElement('div');
+                grid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+                months[monthYear].forEach(dateString => {
+                    const dailySchedule = studyPlan[dateString];
+                    const date = new Date(dateString + 'T00:00:00');
+                    const dayCard = document.createElement('div');
+                    dayCard.className = 'bg-white rounded-lg shadow-md p-4 flex flex-col';
+                    dayCard.dataset.date = dateString;
+                    const dayHeader = document.createElement('h3');
+                    dayHeader.className = 'font-bold text-lg mb-3';
+                    dayHeader.textContent = date.toLocaleString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+                    dayCard.appendChild(dayHeader);
+                    const tasksContainer = document.createElement('div');
+                    tasksContainer.className = 'space-y-2';
+                    dailySchedule.forEach((item, index) => {
+                        const taskDiv = document.createElement('div');
+                        taskDiv.className = `flex items-center p-2 rounded-md space-x-2 ${item.completed ? 'task-completed' : ''}`;
+                        taskDiv.style.backgroundColor = taskTags[item.type]?.color || taskTags.planning.color;
+                        taskDiv.dataset.index = index;
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.checked = item.completed;
+                        checkbox.className = 'flex-shrink-0 h-5 w-5 rounded text-sky-600 focus:ring-sky-500 border-slate-300';
+                        const tagSelector = document.createElement('select');
+                        tagSelector.className = 'tag-selector flex-shrink-0';
+                        tagSelector.style.backgroundColor = taskTags[item.type]?.color || taskTags.planning.color;
+                        for(const tagKey in taskTags) {
+                            const option = document.createElement('option');
+                            option.value = tagKey;
+                            option.textContent = taskTags[tagKey].name;
+                            if(tagKey === item.type) option.selected = true;
+                            tagSelector.appendChild(option);
+                        }
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'flex-grow flex items-center';
+                        const timeInput = document.createElement('input');
+                        timeInput.type = 'text';
+                        timeInput.value = item.time;
+                        timeInput.className = 'time-input font-semibold text-slate-700 w-2/5';
+                        timeInput.dataset.field = 'time';
+                        const taskInput = document.createElement('input');
+                        taskInput.type = 'text';
+                        taskInput.value = item.task;
+                        taskInput.className = 'task-input text-slate-800 w-3/5 ml-2';
+                        taskInput.dataset.field = 'task';
+                        contentDiv.appendChild(timeInput);
+                        contentDiv.appendChild(taskInput);
+                        const linkContainer = document.createElement('div');
+                        linkContainer.className = 'link-container flex-shrink-0 ml-2';
+                        if (item.link) {
+                            const link = document.createElement('a');
+                            link.href = item.link;
+                            link.target = '_blank';
+                            link.rel = 'noopener noreferrer';
+                            link.textContent = '�';
+                            link.className = 'link-button';
+                            linkContainer.appendChild(link);
+                        }
+                        taskDiv.appendChild(checkbox);
+                        taskDiv.appendChild(tagSelector);
+                        taskDiv.appendChild(contentDiv);
+                        taskDiv.appendChild(linkContainer);
+                        tasksContainer.appendChild(taskDiv);
+                    });
+                    dayCard.appendChild(tasksContainer);
+                    grid.appendChild(dayCard);
+                });
+                monthDiv.appendChild(grid);
+                planContainer.appendChild(monthDiv);
+            }
+        }
+
+        planContainer.addEventListener('change', (e) => {
+            const target = e.target;
+            const taskDiv = target.closest('[data-index]');
+            if (!taskDiv) return;
+            const dayCard = target.closest('[data-date]');
+            const date = dayCard.dataset.date;
+            const index = taskDiv.dataset.index;
+            if (target.type === 'checkbox') {
+                studyPlan[date][index].completed = target.checked;
+                taskDiv.classList.toggle('task-completed', target.checked);
+            } else if (target.classList.contains('tag-selector')) {
+                const newType = target.value;
+                studyPlan[date][index].type = newType;
+                taskDiv.style.backgroundColor = taskTags[newType].color;
+                target.style.backgroundColor = taskTags[newType].color;
+            } else if (target.classList.contains('time-input') || target.classList.contains('task-input')) {
+                studyPlan[date][index][target.dataset.field] = target.value;
+            }
+            savePlan();
+        });
+
+        planContainer.addEventListener('click', (e) => {
+            const taskInput = e.target.closest('.task-input');
+            if (taskInput) {
+                const dayCard = taskInput.closest('[data-date]');
+                const taskDiv = taskInput.closest('[data-index]');
+                const date = dayCard.dataset.date;
+                const index = taskDiv.dataset.index;
+                
+                const currentLink = studyPlan[date][index].link || '';
+                const newLink = prompt('Enter a URL for this task (or leave empty to remove):', currentLink);
+
+                if (newLink !== null) {
+                    studyPlan[date][index].link = newLink.trim();
+                    savePlan();
+                    
+                    const linkContainer = taskDiv.querySelector('.link-container');
+                    linkContainer.innerHTML = '';
+                    if (studyPlan[date][index].link) {
+                        const link = document.createElement('a');
+                        link.href = studyPlan[date][index].link;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        link.textContent = '🔗';
+                        link.className = 'link-button';
+                        linkContainer.appendChild(link);
+                    }
+                }
+            }
+        });
+        
+        monthSelector.addEventListener('change', (e) => {
+            const selectedMonth = document.getElementById(e.target.value);
+            if (selectedMonth) {
+                selectedMonth.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        accordionContainer.addEventListener('click', (e) => {
+            const header = e.target.closest('.accordion-header');
+            if (header) {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('span:last-child');
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            }
+        });
+
+        renderPlan();
+    });
+    </script>
+</body>
+</html>
+�
