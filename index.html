@@ -49,17 +49,6 @@
         .dark .task-input:focus, .dark .time-input:focus {
              background-color: var(--tw-prose-dark-surface);
         }
-        .tag-selector {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-color: transparent;
-            border: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
         .task-completed .time-input, .task-completed .task-input {
             text-decoration: line-through;
             opacity: 0.6;
@@ -358,7 +347,7 @@
                 const taskColor = isDark ? taskTags[item.type]?.dark : taskTags[item.type]?.light;
 
                 const taskDiv = document.createElement('div');
-                taskDiv.className = `flex items-center p-3 rounded-lg space-x-4 border border-transparent ${item.completed ? 'task-completed' : ''}`;
+                taskDiv.className = `flex items-center p-3 rounded-lg space-x-3 ${item.completed ? 'task-completed' : ''}`;
                 taskDiv.style.backgroundColor = taskColor || '#e2e8f0';
                 taskDiv.dataset.index = index;
                 
@@ -367,17 +356,13 @@
                 checkbox.checked = item.completed;
                 checkbox.className = 'flex-shrink-0 h-5 w-5 rounded text-brand-accent focus:ring-brand-accent border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700';
                 
-                const tagSelector = document.createElement('select');
-                tagSelector.className = 'tag-selector flex-shrink-0';
-                tagSelector.style.backgroundColor = taskColor || '#e2e8f0';
-                for(const tagKey in taskTags) {
-                    const option = document.createElement('option');
-                    option.value = tagKey;
-                    option.textContent = taskTags[tagKey].name;
-                    if(tagKey === item.type) option.selected = true;
-                    tagSelector.appendChild(option);
-                }
-                
+                const tagContainer = document.createElement('div');
+                tagContainer.className = 'relative flex-shrink-0';
+                const tagButton = document.createElement('button');
+                tagButton.className = 'tag-selector';
+                tagButton.style.backgroundColor = taskColor || '#e2e8f0';
+                tagContainer.appendChild(tagButton);
+
                 const contentDiv = document.createElement('div');
                 contentDiv.className = 'flex-grow flex flex-col sm:flex-row sm:items-center task-tag';
                 
@@ -409,7 +394,7 @@
                 }
                 
                 taskDiv.appendChild(checkbox);
-                taskDiv.appendChild(tagSelector);
+                taskDiv.appendChild(tagContainer);
                 taskDiv.appendChild(contentDiv);
                 taskDiv.appendChild(linkContainer);
                 tasksContainer.appendChild(taskDiv);
@@ -429,27 +414,60 @@
             if (target.type === 'checkbox') {
                 studyPlan[date][index].completed = target.checked;
                 taskDiv.classList.toggle('task-completed', target.checked);
-            } else if (target.classList.contains('tag-selector')) {
-                const newType = target.value;
-                studyPlan[date][index].type = newType;
-                const isDark = document.documentElement.classList.contains('dark');
-                const newColor = isDark ? taskTags[newType].dark : taskTags[newType].light;
-                taskDiv.style.backgroundColor = newColor;
-                target.style.backgroundColor = newColor;
             } else if (target.classList.contains('time-input') || target.classList.contains('task-input')) {
                 studyPlan[date][index][target.dataset.field] = target.value;
             }
             savePlan();
         });
 
+        function closeAllTagMenus() {
+            document.querySelectorAll('.tag-menu').forEach(menu => menu.remove());
+        }
+
         planContainer.addEventListener('click', (e) => {
-            const taskInput = e.target.closest('.task-input');
-            if (taskInput) {
-                const dayCard = taskInput.closest('[data-date]');
-                const taskDiv = taskInput.closest('[data-index]');
-                const date = dayCard.dataset.date;
-                const index = taskDiv.dataset.index;
+            const target = e.target;
+            const isTagButton = target.classList.contains('tag-selector');
+            const isTaskInput = target.classList.contains('task-input');
+            
+            const dayCard = target.closest('[data-date]');
+            if (!dayCard) { closeAllTagMenus(); return; }
+            const date = dayCard.dataset.date;
+            const taskDiv = target.closest('[data-index]');
+            if (!taskDiv) { closeAllTagMenus(); return; }
+            const index = taskDiv.dataset.index;
+
+            if (isTagButton) {
+                e.stopPropagation();
+                closeAllTagMenus();
                 
+                const menu = document.createElement('div');
+                menu.className = 'tag-menu absolute z-10 top-full mt-2 w-40 bg-light-surface dark:bg-dark-surface rounded-md shadow-lg border border-slate-200 dark:border-slate-700';
+                
+                for (const tagKey in taskTags) {
+                    const isDark = document.documentElement.classList.contains('dark');
+                    const color = isDark ? taskTags[tagKey].dark : taskTags[tagKey].light;
+                    const option = document.createElement('div');
+                    option.className = 'flex items-center p-2 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer';
+                    option.dataset.tagKey = tagKey;
+                    option.innerHTML = `
+                        <span class="w-4 h-4 rounded-full mr-3" style="background-color: ${color}"></span>
+                        <span class="text-sm font-medium text-light-text-primary dark:text-dark-text-primary">${taskTags[tagKey].name}</span>
+                    `;
+                    menu.appendChild(option);
+                }
+                target.parentElement.appendChild(menu);
+
+            } else if (target.closest('.tag-menu')) {
+                const newType = target.closest('[data-tag-key]').dataset.tagKey;
+                studyPlan[date][index].type = newType;
+                savePlan();
+                renderCurrentDay();
+                closeAllTagMenus();
+            } else {
+                closeAllTagMenus();
+            }
+
+            if (isTaskInput) {
                 const currentLink = studyPlan[date][index].link || '';
                 const newLink = prompt('Enter a URL for this task (or leave empty to remove):', currentLink);
 
@@ -461,6 +479,12 @@
             }
         });
         
+        document.body.addEventListener('click', (e) => {
+            if (!e.target.closest('.tag-selector-container')) {
+                closeAllTagMenus();
+            }
+        });
+
         prevDayButton.addEventListener('click', () => {
             currentDate.setUTCDate(currentDate.getUTCDate() - 1);
             renderCurrentDay();
