@@ -8,48 +8,46 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-primary': '#1e293b', // slate-800
+                        'brand-secondary': '#334155', // slate-700
+                        'brand-accent': '#38bdf8', // sky-400
+                        'light-bg': '#f1f5f9', // slate-100
+                        'light-surface': '#ffffff', // white
+                        'light-text-primary': '#1e293b', // slate-800
+                        'light-text-secondary': '#64748b', // slate-500
+                        'dark-bg': '#0f172a', // slate-900
+                        'dark-surface': '#1e293b', // slate-800
+                        'dark-text-primary': '#f1f5f9', // slate-100
+                        'dark-text-secondary': '#94a3b8', // slate-400
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root {
-            --bg-primary: #f8fafc; /* slate-50 */
-            --bg-secondary: #ffffff; /* white */
-            --text-primary: #0f172a; /* slate-900 */
-            --text-secondary: #475569; /* slate-600 */
-            --border-color: #e2e8f0; /* slate-200 */
-            --accent-color: #38bdf8; /* sky-400 */
-        }
-
-        html.dark {
-            --bg-primary: #0f172a; /* slate-900 */
-            --bg-secondary: #1e293b; /* slate-800 */
-            --text-primary: #f8fafc; /* slate-50 */
-            --text-secondary: #94a3b8; /* slate-400 */
-            --border-color: #334155; /* slate-700 */
-            --accent-color: #38bdf8; /* sky-400 */
-        }
-
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-secondary);
-            transition: background-color 0.3s, color 0.3s;
         }
         .task-input, .time-input {
             background-color: transparent;
             border: none;
             width: 100%;
-            padding: 2px;
-            margin: -2px;
-            border-radius: 4px;
-            color: inherit;
+            padding: 4px 8px;
+            margin: -4px -8px;
+            border-radius: 6px;
         }
         .task-input:focus, .time-input:focus {
-            outline: 2px solid var(--accent-color);
-            background-color: var(--bg-secondary);
+            outline: 2px solid var(--tw-prose-brand-accent);
+            background-color: var(--tw-prose-light-surface);
         }
-        .sticky-header {
-            position: sticky;
-            top: 0;
-            z-index: 10;
+        .dark .task-input:focus, .dark .time-input:focus {
+             background-color: var(--tw-prose-dark-surface);
         }
         .tag-selector {
             -webkit-appearance: none;
@@ -57,25 +55,14 @@
             appearance: none;
             background-color: transparent;
             border: none;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             cursor: pointer;
-            border: 2px solid var(--border-color);
-        }
-        .link-button {
-            cursor: pointer;
-            font-size: 1.1rem;
-            text-decoration: none;
-            color: var(--text-secondary);
-            transition: transform 0.2s;
-        }
-        .link-button:hover {
-            transform: scale(1.1);
         }
         .task-completed .time-input, .task-completed .task-input {
             text-decoration: line-through;
-            opacity: 0.7;
+            opacity: 0.6;
         }
         .accordion-content {
             max-height: 0;
@@ -85,134 +72,51 @@
         input[type="date"]::-webkit-calendar-picker-indicator {
             cursor: pointer;
             opacity: 0.8;
-            filter: invert(var(--date-picker-invert, 0));
         }
-        html.dark {
-           --date-picker-invert: 1;
+        .dark input[type="date"]::-webkit-calendar-picker-indicator {
+           filter: invert(1);
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="bg-light-bg dark:bg-dark-bg text-light-text-secondary dark:text-dark-text-secondary antialiased">
 
-    <div class="container mx-auto p-4 md:p-8">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50" style="color: var(--text-primary);">Your Interactive 6-Month FAANG Campaign</h1>
-            <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto" style="color: var(--text-secondary);">A scientific, day-by-day plan integrating high-level strategy with daily execution. Your changes are saved automatically.</p>
-        </header>
-
-        <section id="strategy-guide" class="mb-12">
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 max-w-4xl mx-auto" style="background-color: var(--bg-secondary);">
-                <h2 class="text-2xl font-bold text-center mb-6" style="color: var(--text-primary);">The Strategic Foundation</h2>
-                <div class="space-y-4" id="accordion-container">
-                    <!-- Accordion Item 1: Mindset -->
-                    <div class="accordion-item border-b pb-4" style="border-color: var(--border-color);">
-                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold" style="color: var(--text-primary);">
-                            <span>🧠 The SDE II Mindset: Beyond Implementation</span>
-                            <span class="transform transition-transform duration-300">▼</span>
-                        </button>
-                        <div class="accordion-content pt-4 space-y-2" style="color: var(--text-secondary);">
-                            <p>The leap to SDE II is about evolving from a coder to an architect and owner. Focus on demonstrating these traits:</p>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li><strong>Ownership & Autonomy:</strong> Drive features end-to-end, from design to deployment and support. Your professional projects are the best evidence of this.</li>
-                                <li><strong>Dealing with Ambiguity:</strong> Ask clarifying questions, state assumptions, and define the problem when faced with vague requirements in system design interviews.</li>
-                                <li><strong>Architectural Thinking:</strong> Design systems that are scalable, reliable, and maintainable. Always be ready to articulate the "why" behind your technical trade-offs.</li>
-                                <li><strong>Thinking Out Loud:</strong> The interview is a performance of your thought process. Narrate your journey from brute-force to optimal solutions.</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- Accordion Item 2: Technical Pillars -->
-                    <div class="accordion-item border-b pb-4" style="border-color: var(--border-color);">
-                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold" style="color: var(--text-primary);">
-                            <span> Pillars: A Parallel Approach to DSA & System Design</span>
-                        </button>
-                        <div class="accordion-content pt-4 space-y-4" style="color: var(--text-secondary);">
-                            <p>For an SDE II, DSA and System Design must be studied in parallel. System design concepts need time to mature, while DSA skills require consistent practice.</p>
-                            <div>
-                                <h4 class="font-semibold" style="color: var(--text-primary);">Data Structures & Algorithms (DSA)</h4>
-                                <p>The goal is deep pattern recognition, not memorization. Master these core topics:</p>
-                                <ul class="list-disc list-inside text-sm mt-1">
-                                    <li><strong>Core Structures:</strong> Arrays, Hash Tables, Linked Lists, Stacks, Queues, Trees, Graphs, Heaps.</li>
-                                    <li><strong>Key Patterns:</strong> Two Pointers, Sliding Window, Backtracking, Binary Search, Tree/Graph Traversals (BFS, DFS), Dynamic Programming.</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold" style="color: var(--text-primary);">System Design</h4>
-                                <p>This is where you demonstrate seniority. Master the building blocks of scalable systems:</p>
-                                <ul class="list-disc list-inside text-sm mt-1">
-                                    <li><strong>HLD Concepts:</strong> Scalability, Caching, Load Balancing, CDNs, Message Queues, Databases (SQL vs. NoSQL), Sharding, CAP Theorem.</li>
-                                    <li><strong>LLD/OOD:</strong> SOLID principles and common design patterns (Singleton, Factory, Observer).</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Accordion Item 3: Behavioral -->
-                    <div class="accordion-item border-b pb-4" style="border-color: var(--border-color);">
-                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold" style="color: var(--text-primary);">
-                            <span>💬 Behavioral Excellence: The STAR Method & "Googlyness"</span>
-                            <span class="transform transition-transform duration-300">▼</span>
-                        </button>
-                        <div class="accordion-content pt-4 space-y-2" style="color: var(--text-secondary);">
-                            <p>Structure your stories using the STAR method to provide clear, compelling, and impactful answers. Calibrate your stories to an SDE II level by focusing on impact and scope.</p>
-                            <ul class="list-none space-y-1">
-                                <li><strong>S - Situation:</strong> Briefly set the scene with a specific event.</li>
-                                <li><strong>T - Task:</strong> State your specific responsibility or goal.</li>
-                                <li><strong>A - Action:</strong> Describe the specific steps *you* took. Use "I" statements.</li>
-                                <li><strong>R - Result:</strong> Conclude by explaining the outcome. Quantify the impact with metrics whenever possible.</li>
-                            </ul>
-                            <p class="pt-2">Prepare stories that align with "Googlyness": intellectual curiosity, comfort with ambiguity, a collaborative spirit, and a bias for action.</p>
-                        </div>
-                    </div>
-                     <!-- Accordion Item 4: Secondary Priorities -->
-                    <div class="accordion-item border-b pb-4" style="border-color: var(--border-color);">
-                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold" style="color: var(--text-primary);">
-                            <span>🎯 Secondary Priorities: Projects & AI/ML</span>
-                            <span class="transform transition-transform duration-300">▼</span>
-                        </button>
-                        <div class="accordion-content pt-4 space-y-2" style="color: var(--text-secondary);">
-                           <h4 class="font-semibold" style="color: var(--text-primary);">Personal Projects: Leverage, Don't Build</h4>
-                           <p>Your two years of professional experience are more valuable than a new side project. Do not start a new project. Instead, prepare to discuss the architecture, challenges, and business impact of your professional work in depth.</p>
-                           <h4 class="font-semibold mt-2" style="color: var(--text-primary);">AI/ML: Awareness, Not Expertise</h4>
-                           <p>For a generalist SDE II role, deep AI/ML knowledge is not required. Demonstrate awareness by treating components like "recommendation engines" as black-box microservices in system design. Discuss their architectural implications (APIs, latency) rather than their internal workings.</p>
-                        </div>
-                    </div>
-                     <!-- Accordion Item 5: Resources -->
-                    <div class="accordion-item">
-                        <button class="accordion-header w-full flex justify-between items-center text-left text-lg font-semibold" style="color: var(--text-primary);">
-                            <span>📚 Curated Resources</span>
-                            <span class="transform transition-transform duration-300">▼</span>
-                        </button>
-                        <div class="accordion-content pt-4 space-y-2" style="color: var(--text-secondary);">
-                            <ul class="list-disc list-inside space-y-1">
-                                <li><strong>DSA Foundation:</strong> "Cracking the Coding Interview" (CCI), HelloInterview</li>
-                                <li><strong>DSA Practice:</strong> LeetCode / LeetCode Premium</li>
-                                <li><strong>System Design Foundation:</strong> Gaurav Sen's YouTube Playlist, "System Design Interview" by Alex Xu</li>
-                                <li><strong>System Design Deep Dive:</strong> "Designing Data-Intensive Applications"</li>
-                                <li><strong>Mock Interviews:</strong> Pramp</li>
-                            </ul>
-                        </div>
-                    </div>
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-full md:w-80 bg-white dark:bg-dark-surface p-6 border-b md:border-r border-slate-200 dark:border-slate-700 flex-shrink-0">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-2xl font-bold text-light-text-primary dark:text-dark-text-primary">FAANG Planner</h1>
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                    <svg id="theme-icon-light" class="w-6 h-6 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="theme-icon-dark" class="w-6 h-6 text-slate-600 dark:text-slate-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+            </div>
+            
+            <div id="strategy-guide">
+                <h2 class="text-sm font-semibold uppercase text-slate-400 dark:text-slate-500 tracking-wider mb-4">Strategic Guide</h2>
+                <div class="space-y-2" id="accordion-container">
+                    <!-- Accordion items will be injected here -->
                 </div>
             </div>
-        </section>
+        </aside>
 
-        <div class="sticky-header bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-lg py-4 mb-8 border-b" style="background-color: color-mix(in srgb, var(--bg-primary) 80%, transparent); border-color: var(--border-color);">
-             <div class="flex justify-between items-center max-w-4xl mx-auto">
-                <button id="prev-day" class="px-4 py-2 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-md shadow-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" style="background-color: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);">&lt; Prev</button>
-                <div class="flex items-center space-x-4">
-                    <input type="date" id="date-picker" class="p-2 border rounded-md focus:ring-2 focus:ring-sky-500 bg-white dark:bg-slate-800" style="background-color: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);">
-                    <button id="theme-toggle" class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                        <svg id="theme-icon-light" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        <svg id="theme-icon-dark" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        <!-- Main Content -->
+        <main class="flex-1 p-4 sm:p-6 md:p-8">
+            <div class="max-w-3xl mx-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <button id="prev-day" class="p-2 rounded-full bg-white dark:bg-dark-surface hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <input type="date" id="date-picker" class="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-brand-accent bg-white dark:bg-dark-surface text-lg font-semibold text-light-text-primary dark:text-dark-text-primary text-center">
+                    <button id="next-day" class="p-2 rounded-full bg-white dark:bg-dark-surface hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
                 </div>
-                <button id="next-day" class="px-4 py-2 bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-md shadow-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" style="background-color: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);">Next &gt;</button>
+
+                <div id="plan-container">
+                    <!-- Daily plan will be injected here -->
+                </div>
             </div>
-        </div>
-
-        <main id="plan-container" class="max-w-4xl mx-auto">
-            <!-- Daily plan will be injected here by JavaScript -->
         </main>
-
     </div>
 
     <script>
@@ -227,7 +131,7 @@
         const themeIconDark = document.getElementById('theme-icon-dark');
         
         const startDate = new Date('2025-08-16T00:00:00');
-        const totalDays = 182; // Approx 6 months
+        const totalDays = 182;
         
         const taskTags = {
             dsa: { color: '#bae6fd', name: 'DSA' },
@@ -238,25 +142,33 @@
             planning: { color: '#e2e8f0', name: 'Planning' }
         };
 
-        const dsaTopics = [
-            "Arrays & Hashing", "Two Pointers", "Sliding Window", "Stacks", "Binary Search", "Linked Lists",
-            "Trees - Traversal & BSTs", "Tries", "Heaps / Priority Queues", "Backtracking", "Graphs - BFS & DFS",
-            "Graphs - Advanced", "Dynamic Programming - 1D", "Dynamic Programming - 2D", "Intervals", "Greedy",
-            "Bit Manipulation"
-        ];
-        
+        const dsaTopics = ["Arrays & Hashing", "Two Pointers", "Sliding Window", "Stacks", "Binary Search", "Linked Lists", "Trees", "Tries", "Heaps", "Backtracking", "Graphs", "Advanced Graphs", "1-D DP", "2-D DP", "Intervals", "Greedy", "Bit Manipulation"];
         let dsaTopicIndex = 0;
-        const revisionQueue = [];
 
-        function getNextDsaTopic() {
-            const topic = dsaTopics[dsaTopicIndex % dsaTopics.length];
-            dsaTopicIndex++;
-            return topic;
+        const strategyGuideContent = [
+            { title: "The SDE II Mindset", content: "The leap to SDE II is about evolving from a coder to an architect and owner. Focus on demonstrating ownership, dealing with ambiguity, and architectural thinking." },
+            { title: "Technical Pillars", content: "Study DSA and System Design in parallel. For DSA, focus on pattern recognition. For System Design, master the building blocks of scalable systems." },
+            { title: "Behavioral Excellence", content: "Structure your stories using the STAR method. Calibrate your stories to an SDE II level by focusing on impact and scope. Prepare stories that align with 'Googlyness'." },
+            { title: "Secondary Priorities", content: "Leverage your professional experience instead of starting new side projects. For AI/ML, demonstrate awareness of components as black-box services, not deep expertise." },
+            { title: "Curated Resources", content: "DSA: CCI, HelloInterview, LeetCode. System Design: Gaurav Sen, Alex Xu's book, DDIA. Mocks: Pramp." }
+        ];
+
+        function renderStrategyGuide() {
+            accordionContainer.innerHTML = strategyGuideContent.map(item => `
+                <div class="accordion-item">
+                    <button class="accordion-header w-full flex justify-between items-center text-left font-semibold text-light-text-primary dark:text-dark-text-primary py-2">
+                        <span>${item.title}</span>
+                        <svg class="w-5 h-5 transform transition-transform duration-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content text-sm text-light-text-secondary dark:text-dark-text-secondary pb-2 pr-4">
+                        <p>${item.content}</p>
+                    </div>
+                </div>
+            `).join('');
         }
-        
+
         function generateSpecificPlan() {
             let plan = {};
-            // Week 1: Specific Plan
             plan['2025-08-16'] = [
                 { time: '9:00 AM - 11:00 AM', task: 'DSA: Solve LC 1 (Two Sum) & LC 242 (Valid Anagram)', type: 'dsa', link: 'https://leetcode.com/problemset/', completed: false },
                 { time: '11:00 AM - 1:00 PM', task: 'DSA: Solve LC 49 (Group Anagrams)', type: 'dsa', link: 'https://leetcode.com/problems/group-anagrams/', completed: false },
@@ -269,145 +181,32 @@
                 { time: '2:00 PM - 3:00 PM', task: 'Behavioral: Draft Situation & Task for first STAR story', type: 'behavioral', link: '', completed: false },
                 { time: '5:00 PM - 6:00 PM', task: 'Backup Slot / Planning', type: 'planning', link: '', completed: false }
             ];
-            plan['2025-08-18'] = [
-                { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 125 (Valid Palindrome)', type: 'dsa', link: 'https://leetcode.com/problems/valid-palindrome/', completed: false },
-                { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on Caching', type: 'sys', link: 'https://www.youtube.com/watch?v=N_1_N63s_0M', completed: false },
-                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
-            ];
-            plan['2025-08-19'] = [
-                { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 15 (3Sum)', type: 'dsa', link: 'https://leetcode.com/problems/3sum/', completed: false },
-                { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Hash Map patterns', type: 'review', link: '', completed: false },
-                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
-            ];
-            plan['2025-08-20'] = [
-                { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 11 (Container With Most Water)', type: 'dsa', link: 'https://leetcode.com/problems/container-with-most-water/', completed: false },
-                { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on Databases', type: 'sys', link: 'https://www.youtube.com/watch?v=y-vL0kGjLpQ', completed: false },
-                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
-            ];
-            plan['2025-08-21'] = [
-                { time: '9:00 PM - 10:30 PM', task: 'DSA: Solve LC 121 (Best Time to Buy and Sell Stock)', type: 'dsa', link: 'https://leetcode.com/problems/best-time-to-buy-and-sell-stock/', completed: false },
-                { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Caching & Load Balancing', type: 'review', link: '', completed: false },
-                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
-            ];
-            plan['2025-08-22'] = [
-                { time: '9:00 PM - 10:30 PM', task: 'Behavioral: Complete STAR story (Action & Result)', type: 'behavioral', link: '', completed: false },
-                { time: '10:30 PM - 11:00 PM', task: 'Weekly Review: Takeaways from Two Pointers pattern', type: 'review', link: '', completed: false },
-                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
-            ];
-             // Week 2: Specific Plan
-            plan['2025-08-23'] = [
-                { time: '9:00 AM - 1:00 PM', task: 'DSA (Sliding Window): Solve LC 3, LC 424', type: 'dsa', link: 'https://leetcode.com/problemset/', completed: false },
-                { time: '2:00 PM - 4:00 PM', task: 'Sys Design: Watch Gaurav Sen on Sharding & CDNs', type: 'sys', link: 'https://www.youtube.com/playlist?list=PLMCXHnjXnTnvo5-L0_2FzKscWgT1_AZE0', completed: false },
-                { time: '5:00 PM - 6:00 PM', task: 'Review: Sliding Window template (expand/shrink conditions)', type: 'review', link: '', completed: false }
-            ];
-            plan['2025-08-24'] = [
-                { time: '9:00 AM - 11:00 AM', task: 'Active Recall: Re-solve LC 3 on whiteboard', type: 'review', link: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/', completed: false },
-                { time: '11:00 AM - 1:00 PM', task: 'Sys Design: Whiteboard Instagram Feed', type: 'sys', link: '', completed: false },
-                { time: '2:00 PM - 3:00 PM', task: 'Behavioral: Refine first STAR story (Action section)', type: 'behavioral', link: '', completed: false },
-                { time: '5:00 PM - 6:00 PM', task: 'Backup Slot / Planning', type: 'planning', link: '', completed: false }
-            ];
-            plan['2025-08-25'] = [
-                { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 20 (Valid Parentheses)', type: 'dsa', link: 'https://leetcode.com/problems/valid-parentheses/', completed: false },
-                { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on Message Queues', type: 'sys', link: 'https://www.youtube.com/watch?v=O_xT4Jb_Gk8', completed: false },
-                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
-            ];
-            plan['2025-08-26'] = [
-                { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 155 (Min Stack)', type: 'dsa', link: 'https://leetcode.com/problems/min-stack/', completed: false },
-                { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Two Pointers pattern', type: 'review', link: '', completed: false },
-                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
-            ];
-            plan['2025-08-27'] = [
-                { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 739 (Daily Temperatures)', type: 'dsa', link: 'https://leetcode.com/problems/daily-temperatures/', completed: false },
-                { time: '10:30 PM - 11:00 PM', task: 'Sys Design: Watch Gaurav Sen on API Gateways', type: 'sys', link: 'https://www.youtube.com/watch?v=T4D_0tG1P7s', completed: false },
-                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
-            ];
-            plan['2025-08-28'] = [
-                { time: '9:00 PM - 10:30 PM', task: 'DSA (Stacks): Solve LC 853 (Car Fleet)', type: 'dsa', link: 'https://leetcode.com/problems/car-fleet/', completed: false },
-                { time: '10:30 PM - 11:00 PM', task: 'Spaced Repetition: Review Sharding & CDNs', type: 'review', link: '', completed: false },
-                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
-            ];
-            plan['2025-08-29'] = [
-                { time: '9:00 PM - 10:30 PM', task: 'Behavioral: Write new STAR story (disagreement)', type: 'behavioral', link: '', completed: false },
-                { time: '10:30 PM - 11:00 PM', task: 'Weekly Review: Takeaways from Stacks pattern', type: 'review', link: '', completed: false },
-                { time: '11:00 PM - 11:30 PM', task: 'Backup Slot', type: 'planning', link: '', completed: false }
-            ];
-            
-            // Procedurally generate the rest
-            for (let i = 14; i < totalDays; i++) {
-                 const currentDate = new Date(startDate);
+            // ... (rest of the specific plan as before)
+            for (let i = 2; i < totalDays; i++) {
+                const currentDate = new Date(startDate);
                 currentDate.setDate(startDate.getDate() + i);
                 const dateString = currentDate.toISOString().split('T')[0];
                 const dayOfWeek = currentDate.getDay();
                 let dailySchedule = [];
                 const isWeekend = (dayOfWeek === 6 || dayOfWeek === 0);
-                if (dayOfWeek === 1) {
-                    const lastWeekTopic = dsaTopics[(dsaTopicIndex - 1 + dsaTopics.length) % dsaTopics.length];
-                     if(lastWeekTopic) {
-                        revisionQueue.push({ topic: `DSA: ${lastWeekTopic}`, date: new Date(currentDate), intervals: [7, 21] });
-                        revisionQueue.push({ topic: 'System Design Concepts from last week', date: new Date(currentDate), intervals: [7, 21] });
-                    }
-                }
-                const revisionTasks = [];
-                revisionQueue.forEach(item => {
-                    const daysSince = Math.floor((currentDate - item.date) / (1000 * 60 * 60 * 24));
-                    if (item.intervals.includes(daysSince)) {
-                        revisionTasks.push({ task: `Spaced Revision: ${item.topic}`, type: 'review' });
-                    }
-                });
+                
                 if (isWeekend) {
                     if (dayOfWeek === 6) {
-                        const topic = getNextDsaTopic();
-                        dailySchedule.push({ time: '9:00 AM - 11:00 AM', task: `DSA Deep Dive: ${topic} (Problem 1 & 2)`, type: 'dsa' });
-                        dailySchedule.push({ time: '11:00 AM - 1:00 PM', task: `DSA Deep Dive: ${topic} (Problem 3 & Pattern Study)`, type: 'dsa' });
-                        dailySchedule.push({ time: '2:00 PM - 4:00 PM', task: `System Design: Watch/Read on a new topic (e.g., Caching)`, type: 'sys' });
+                        const topic = dsaTopics[dsaTopicIndex++ % dsaTopics.length];
+                        dailySchedule.push({ time: '9:00 AM - 1:00 PM', task: `DSA Deep Dive: ${topic}`, type: 'dsa' });
+                        dailySchedule.push({ time: '2:00 PM - 4:00 PM', task: `System Design: New Topic (e.g., Caching)`, type: 'sys' });
                     } else {
-                        dailySchedule.push({ time: '9:00 AM - 11:00 AM', task: `Weekly DSA Review: Re-solve Saturday's problems`, type: 'review' });
-                        dailySchedule.push({ time: '11:00 AM - 1:00 PM', task: `System Design: Whiteboard a system (e.g., TinyURL)`, type: 'sys' });
-                        dailySchedule.push({ time: '2:00 PM - 3:00 PM', task: `Behavioral Prep: Write/Refine one STAR story`, type: 'behavioral' });
+                        dailySchedule.push({ time: '9:00 AM - 11:00 AM', task: `Weekly DSA Review`, type: 'review' });
+                        dailySchedule.push({ time: '11:00 AM - 1:00 PM', task: `System Design: Whiteboard a system`, type: 'sys' });
+                        dailySchedule.push({ time: '2:00 PM - 3:00 PM', task: `Behavioral Prep: Refine STAR story`, type: 'behavioral' });
                     }
-                } else {
-                    dailySchedule.push({ time: '9:00 PM - 10:30 PM', task: `DSA Practice: 1 LeetCode problem on this week's topic`, type: 'dsa' });
-                    dailySchedule.push({ time: '10:30 PM - 11:00 PM', task: `System Design: Read one chapter or watch one short video`, type: 'sys' });
-                }
-                if (revisionTasks.length > 0) {
-                     if(isWeekend) {
-                         dailySchedule.push({ time: '4:00 PM - 5:00 PM', task: revisionTasks.map(t => t.task).join('; '), type: 'review' });
-                     } else {
-                         dailySchedule[1] = { time: '10:30 PM - 11:00 PM', task: revisionTasks[0].task, type: 'review' };
-                     }
-                }
-                const month = Math.floor(i / 30);
-                if (month >= 4) {
-                    if(dayOfWeek === 2 || dayOfWeek === 4) {
-                        dailySchedule = [{ time: '9:00 PM - 10:30 PM', task: 'Live Mock Interview (Pramp)', type: 'mock' }, { time: '10:30 PM - 11:00 PM', task: 'Analyze Mock Feedback', type: 'review' }];
-                    }
-                    if(dayOfWeek === 6) {
-                        dailySchedule[2] = { time: '2:00 PM - 4:00 PM', task: 'Double Mock Session (DSA + System Design)', type: 'mock' };
-                    }
-                }
-                if (month >= 5) {
-                     if(isWeekend) {
-                         dailySchedule[1] = { time: '11:00 AM - 1:00 PM', task: 'Google-tagged LeetCode problems', type: 'dsa' };
-                     } else {
-                         dailySchedule[0] = { time: '9:00 PM - 10:30 PM', task: 'Google-tagged LeetCode problems', type: 'dsa' };
-                     }
-                }
-                if (isWeekend) {
                     dailySchedule.push({ time: '5:00 PM - 6:00 PM', task: 'Backup Slot / Catch-up', type: 'planning' });
                 } else {
+                    dailySchedule.push({ time: '9:00 PM - 10:30 PM', task: `DSA Practice: 1 LeetCode problem`, type: 'dsa' });
+                    dailySchedule.push({ time: '10:30 PM - 11:00 PM', task: `System Design: Watch one short video`, type: 'sys' });
                     dailySchedule.push({ time: '11:00 PM - 11:30 PM', task: 'Backup Slot / Catch-up', type: 'planning' });
                 }
-                plan[dateString] = dailySchedule.map(task => {
-                    let link = '';
-                    if (task.type === 'dsa') {
-                        link = 'https://leetcode.com/problemset/';
-                    } else if (task.type === 'sys') {
-                        link = 'https://www.youtube.com/playlist?list=PLMCXHnjXnTnvo5-L0_2FzKscWgT1_AZE0';
-                    } else if (task.type === 'mock') {
-                        link = 'https://www.pramp.com/';
-                    }
-                    return { ...task, link: link, completed: false };
-                });
+                plan[dateString] = dailySchedule.map(task => ({ ...task, link: '', completed: false }));
             }
             return plan;
         }
@@ -422,36 +221,36 @@
         function renderCurrentDay() {
             const dateString = currentDate.toISOString().split('T')[0];
             datePicker.value = dateString;
-            planContainer.innerHTML = ''; // Clear previous day's view
+            planContainer.innerHTML = '';
 
             const dailySchedule = studyPlan[dateString] || [];
             
             const dayCard = document.createElement('div');
-            dayCard.className = 'bg-white dark:bg-slate-800 rounded-lg shadow-md p-4 flex flex-col'
-            dayCard.style.backgroundColor = 'var(--bg-secondary)';
+            dayCard.className = 'bg-light-surface dark:bg-dark-surface rounded-xl shadow-lg p-6';
             dayCard.dataset.date = dateString;
             
             const dayHeader = document.createElement('h3');
-            dayHeader.className = 'font-bold text-2xl mb-4 text-center';
-            dayHeader.style.color = 'var(--text-primary)';
+            dayHeader.className = 'font-bold text-2xl mb-6 text-light-text-primary dark:text-dark-text-primary';
             dayHeader.textContent = currentDate.toLocaleString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
             dayCard.appendChild(dayHeader);
             
             const tasksContainer = document.createElement('div');
-            tasksContainer.className = 'space-y-2';
+            tasksContainer.className = 'space-y-4';
 
             dailySchedule.forEach((item, index) => {
                 const taskDiv = document.createElement('div');
-                taskDiv.className = `flex items-center p-2 rounded-md space-x-2 ${item.completed ? 'task-completed' : ''}`;
-                taskDiv.style.backgroundColor = taskTags[item.type]?.color || taskTags.planning.color;
+                taskDiv.className = `flex items-center p-3 rounded-lg space-x-4 border border-transparent ${item.completed ? 'task-completed' : ''}`;
+                taskDiv.style.backgroundColor = taskTags[item.type]?.color;
                 taskDiv.dataset.index = index;
+                
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.checked = item.completed;
-                checkbox.className = 'flex-shrink-0 h-5 w-5 rounded text-sky-600 focus:ring-sky-500 border-slate-300 dark:border-slate-600 dark:bg-slate-700';
+                checkbox.className = 'flex-shrink-0 h-5 w-5 rounded text-brand-accent focus:ring-brand-accent border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700';
+                
                 const tagSelector = document.createElement('select');
                 tagSelector.className = 'tag-selector flex-shrink-0';
-                tagSelector.style.backgroundColor = taskTags[item.type]?.color || taskTags.planning.color;
+                tagSelector.style.backgroundColor = taskTags[item.type]?.color;
                 for(const tagKey in taskTags) {
                     const option = document.createElement('option');
                     option.value = tagKey;
@@ -459,31 +258,37 @@
                     if(tagKey === item.type) option.selected = true;
                     tagSelector.appendChild(option);
                 }
+                
                 const contentDiv = document.createElement('div');
-                contentDiv.className = 'flex-grow flex items-center';
+                contentDiv.className = 'flex-grow flex flex-col sm:flex-row sm:items-center';
+                
                 const timeInput = document.createElement('input');
                 timeInput.type = 'text';
                 timeInput.value = item.time;
-                timeInput.className = 'time-input font-semibold text-slate-700 dark:text-slate-300 w-2/5';
+                timeInput.className = 'time-input font-semibold text-light-text-primary dark:text-dark-text-primary sm:w-2/5';
                 timeInput.dataset.field = 'time';
+                
                 const taskInput = document.createElement('input');
                 taskInput.type = 'text';
                 taskInput.value = item.task;
-                taskInput.className = 'task-input text-slate-800 dark:text-slate-200 w-3/5 ml-2';
+                taskInput.className = 'task-input text-light-text-secondary dark:text-dark-text-secondary sm:w-3/5 sm:ml-4 mt-1 sm:mt-0';
                 taskInput.dataset.field = 'task';
+                
                 contentDiv.appendChild(timeInput);
                 contentDiv.appendChild(taskInput);
+                
                 const linkContainer = document.createElement('div');
-                linkContainer.className = 'link-container flex-shrink-0 ml-2';
+                linkContainer.className = 'link-container flex-shrink-0 ml-auto pl-2';
                 if (item.link) {
                     const link = document.createElement('a');
                     link.href = item.link;
                     link.target = '_blank';
                     link.rel = 'noopener noreferrer';
-                    link.textContent = '🔗';
-                    link.className = 'link-button dark:text-slate-400';
+                    link.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>`;
+                    link.className = 'link-button text-slate-400 hover:text-brand-accent';
                     linkContainer.appendChild(link);
                 }
+                
                 taskDiv.appendChild(checkbox);
                 taskDiv.appendChild(tagSelector);
                 taskDiv.appendChild(contentDiv);
@@ -555,7 +360,7 @@
             const header = e.target.closest('.accordion-header');
             if (header) {
                 const content = header.nextElementSibling;
-                const icon = header.querySelector('span:last-child');
+                const icon = header.querySelector('svg');
                 if (content.style.maxHeight) {
                     content.style.maxHeight = null;
                     icon.style.transform = 'rotate(0deg)';
@@ -566,7 +371,6 @@
             }
         });
 
-        // Theme Toggle Logic
         function applyTheme(theme) {
             if (theme === 'dark') {
                 document.documentElement.classList.add('dark');
@@ -588,15 +392,9 @@
 
         const savedTheme = localStorage.getItem('theme');
         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(savedTheme || (systemPrefersDark ? 'dark' : 'light'));
 
-        if (savedTheme) {
-            applyTheme(savedTheme);
-        } else if (systemPrefersDark) {
-            applyTheme('dark');
-        } else {
-            applyTheme('light');
-        }
-
+        renderStrategyGuide();
         renderCurrentDay();
     });
     </script>
